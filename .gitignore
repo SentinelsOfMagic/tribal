@@ -11,6 +11,9 @@ remote.DS_Store
 # mongo database directory
 mongo/
 
+# Spotify keys
+config.js
+
 # Stuff from Kurt's text editor:
 *.pui
 *.prj
