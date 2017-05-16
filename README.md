@@ -1,9 +1,16 @@
-# The Justice League - GroupList
+# Tribal 2: Electric Boogaloo
 
 > Service to allow groups to create shared music pools for group events
 
 ## Team
 
+### Sentinels Of Magic
+  - April Ablon
+  - Connor Wilson
+  - Ivana He
+  - Khoa Vo
+  - 
+### The Justice League
   - James Hogan
   - Kurt Larson
   - Ramsha Mushtaq
@@ -25,10 +32,7 @@
 ## Requirements
 
 - Node 6.4.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+- MongoDB
 
 ## Development
 
@@ -37,10 +41,9 @@
 From within the root directory:
 
 ```sh
-npm install -g bower
 npm install
-bower install
 ```
+Have a running instance of Mongo
 
 ### Roadmap
 
