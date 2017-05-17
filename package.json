@@ -1,10 +1,10 @@
 {
-  "name": "Tribal",
+  "name": "Tribal2",
   "version": "0.0.0",
   "description": "Collaborative playlist editor.",
-  "author": "Ramsha Mushtaq, Kurt Larson, James Hogan",
+  "author": "SentinelsOfMagic, The-Justice-League",
   "license": "ISC",
-  "repository": "https://github.com/The-Justice-League/tribal",
+  "repository": "https://github.com/SentinelsOfMagic/tribal",
   "engines": {
     "node": ">=6.4.0"
   },
