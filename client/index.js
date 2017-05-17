@@ -4,7 +4,8 @@ angular.module( 'tribal', [] )
 
     $locationProvider.html5Mode({
       enabled: true,
-      requireBase: false
+      requireBase: false,
+      rewriteLinks: false
     });
 
     $sceDelegateProvider.resourceUrlWhitelist([
