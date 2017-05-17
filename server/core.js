@@ -3,6 +3,8 @@ const db = require('./database');
 const Promise = require('bluebird');
 const request = require('request');
 const mongoose = require('mongoose');
+const loginHandler = require('./login-handler.js');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const http = require('http').Server(app);
@@ -13,6 +15,8 @@ const SERVER_PORT = process.env.PORT || 4242;
 const DATABASE_CONNECTED_MESSAGE_PREFIX = 'Database connection status: ';
 const DATABASE_CONNECTED_MESSAGE = 'Connected';
 const DATABASE_NOT_CONNECTED_MESSAGE = 'NOT connected';
+
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   if (process.env.DEPLOY_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
@@ -26,6 +30,11 @@ app.use((req, res, next) => {
     next();
   }
 });
+
+// Spotify login routes
+app.get('/login', loginHandler.login);
+app.get('/callback', loginHandler.callback);
+app.get('/refresh_token', loginHandler.refreshToken);
 
 // test endpoint for reporting status of database connection
 app.get('/test', (req, res) => {
