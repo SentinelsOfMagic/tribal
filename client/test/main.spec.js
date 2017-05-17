@@ -29,7 +29,7 @@ describe( 'main', function() {
   // the directive's compilation dependencies (an angular scope, and the tribalServer service)
   // $q, for use with stubbing out the tribalServer service for testing
   beforeEach( inject(function($compile, $rootScope, tribalServer, $q) {
-    debugger;
+    //debugger;
     var scope = $rootScope.$new();
 
     // stub out the tribalServer test function so it doesn't make an http request
