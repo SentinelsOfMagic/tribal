@@ -31,6 +31,7 @@ h2 {
 
 div {
   font-size: 16px;
+  padding: 10px;
 }
 
 div.container {
@@ -47,6 +48,10 @@ div.container {
   width: 100%;
   font-weight: bold;
   margin-left: 65px;
+}
+
+.landing-container {
+  text-align: center;
 }
 
 th, td {
@@ -82,8 +87,18 @@ th, td {
   font-size: 16px;
 }
 
+.landing-button {
+  font-size: 24px;
+}
+
+.enter-button {
+  font-size: 16px;
+}
+
 .addSongButton,
-#searchButton {
+#searchButton,
+.landing-button,
+.enter-button {
   border: none;
   background-color: black;
   border-radius: 15px;
@@ -122,6 +137,16 @@ th, td {
 
 .searchResult{
   margin-bottom: 10px;
+}
+
+#hash-input {
+  height: 30px;
+  width: 300px;
+  border: none;
+  background-image: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 
 #playlist {
