@@ -27,6 +27,15 @@ const tribalServer = function( $http ) {
       }
     });
   };
+
+  this.checkPlaylistHash = function(hash) {
+    console.log('made it to tribal server: ', hash);
+    return $http.get('/playlist', {
+      params: {
+        playlist: hash
+      }
+    });
+  };
 };
 
 angular.module('tribal').service('tribalServer', ['$http', tribalServer]);
