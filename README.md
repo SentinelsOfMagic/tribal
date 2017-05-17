@@ -46,6 +46,12 @@ npm install
 Have a running instance of Mongo
 Add file called '.env' and copy .env.example, replacing Spotify key fields.
 
+### Deployment
+
+Hardcoded https redirects need to be set in core.js
+Put all env variables on Heroku instance
+Provision heroku instance with mLab mongo database 
+
 ### Roadmap
 
 View the project roadmap [here](LINK_TO_DOC)
