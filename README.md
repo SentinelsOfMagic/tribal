@@ -44,6 +44,7 @@ From within the root directory:
 npm install
 ```
 Have a running instance of Mongo
+Add file called '.env' and copy .env.example, replacing Spotify key fields.
 
 ### Roadmap
 
