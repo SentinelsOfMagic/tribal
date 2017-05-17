@@ -13,6 +13,7 @@ mongo/
 
 # Spotify keys
 config.js
+.env
 
 # Stuff from Kurt's text editor:
 *.pui

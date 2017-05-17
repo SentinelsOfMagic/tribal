@@ -14,6 +14,19 @@ const DATABASE_CONNECTED_MESSAGE_PREFIX = 'Database connection status: ';
 const DATABASE_CONNECTED_MESSAGE = 'Connected';
 const DATABASE_NOT_CONNECTED_MESSAGE = 'NOT connected';
 
+app.use((req, res, next) => {
+  if (process.env.DEPLOY_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
+    res.redirect('https://tribal2.herokuapp.com' + req.url);
+  } else if (process.env.DEPLOY_ENV === 'staging' && req.headers['x-forwarded-proto'] !== 'https') {
+    res.redirect('https://tribal2-staging.herokuapp.com' + req.url);
+    // warmsea is Connor's dev staging to check URLs before staging pull requests
+  } else if (process.env.DEPLOY_ENV === 'warmsea' && req.headers['x-forwarded-proto'] !== 'https') {
+    res.redirect('https://warm-sea-98216.herokuapp.com' + req.url);
+  } else {
+    next();
+  }
+});
+
 // test endpoint for reporting status of database connection
 app.get('/test', (req, res) => {
   const message = DATABASE_CONNECTED_MESSAGE_PREFIX +
