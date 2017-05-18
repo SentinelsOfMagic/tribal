@@ -13,7 +13,9 @@ const MainController = function( tribalServer, $scope ) {
 
 const Main = function() {
   return {
-    scope: {},
+    scope: {
+      playlistUri: '<'
+    },
     restrict: 'E',
     controller: [ 'tribalServer', '$scope', MainController ],
     controllerAs: 'ctrl',
