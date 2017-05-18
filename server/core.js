@@ -36,6 +36,11 @@ app.get('/login', Login.login);
 app.get('/callback', Login.callback);
 app.get('/refresh_token', Login.refreshToken);
 
+
+// app.get('/addSong', (req, res, err) => {
+
+// });
+
 // test endpoint for reporting status of database connection
 app.get('/test', (req, res) => {
   const message = DATABASE_CONNECTED_MESSAGE_PREFIX +
