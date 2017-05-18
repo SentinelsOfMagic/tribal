@@ -1,27 +1,26 @@
-const MainController = function( tribalServer, $scope ) {
+angular.module('tribal')
 
+.controller('MainController', function(tribalServer) {
   tribalServer.test()
-    .then( (res) => {
+    .then(res => {
       this.messageFromServer = res.data;
     });
 
   this.searchResultsHandler = (results) => {
-    this.searchResults = results.data.map( result => result.uri );
-    // $scope.$apply();
+    this.searchResults = results.data.map(result => result.uri);
   };
-};
+})
 
-const Main = function() {
+.directive('main', function() {
   return {
     scope: {
       playlistUri: '<'
     },
     restrict: 'E',
-    controller: [ 'tribalServer', '$scope', MainController ],
+    controller: 'MainController',
     controllerAs: 'ctrl',
     bindToController: true,
     templateUrl: '/templates/main.html',
   };
-};
+});
 
-angular.module('tribal').directive('main', Main);
