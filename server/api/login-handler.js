@@ -83,7 +83,6 @@ let callback = (req, res) => {
 
         let accessToken = body.access_token;
         let refreshToken = body.refresh_token;
-        console.log('GET TOKEN', body);
 
         let options = {
           url: 'https://api.spotify.com/v1/me',
@@ -100,13 +99,15 @@ let callback = (req, res) => {
     // create account in db, create playlist on spotify
     .then(([res, accessToken, refreshToken]) => {
       let body = res.body;
+      let playlistName = generateRandomString(5);
       return Promise.all([
+        db.insertPlaylist(playlistName, body.id),
         db.insertAccount(body.id, accessToken, refreshToken),
-        Spotify.createPlaylist(accessToken, )
-        ]);
+        Spotify.createPlaylist(accessToken, body.id, playlistName)
+      ]);
     })
-    .then(() => {
-      res.redirect('/');
+    .then(([dbPlaylistId, dbAccount, spotifyPlaylist]) => {
+      res.redirect(`/?playlist=${dbPlaylistId}`);
     })
     .catch((err) => {
       console.log(err);

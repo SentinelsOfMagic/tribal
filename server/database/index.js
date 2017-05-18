@@ -22,6 +22,7 @@ const insertAccount = (accountId, accessToken, refreshToken) => {
   newAccount.save()
   .then((account) => {
     console.log('new account successfully saved to db:', account);
+    return account;
   })
   .catch((err) => {
     console.log('error occurred while saving new account to db:', err);
@@ -42,7 +43,7 @@ const PlaylistSchema = mongoose.Schema({
 const Playlist = mongoose.model('Playlist', PlaylistSchema);
 
 const insertPlaylist = (playlistId, accountId) => {
-  Playlist.create({
+  return Playlist.create({
     playlistId: playlistId,
     accountId: accountId
   })
