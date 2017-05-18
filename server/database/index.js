@@ -56,7 +56,7 @@ const insertPlaylist = (playlistId, accountId) => {
 };
 
 // DELETE LATER - just dummy data that April is using
-// insertPlaylist('6A66KGoajMxC6eE7IgJrE7', '1233151550');
+insertPlaylist('6A66KGoajMxC6eE7IgJrE7', '1233151550');
 
 const retrievePlaylist = (playlistHash) => {
   return Playlist.find({_id: playlistHash});
