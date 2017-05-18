@@ -4,12 +4,15 @@ const Promise = require('bluebird');
 const querystring = require('querystring');
 const request = Promise.promisifyAll(require('request'));
 const db = require('../database');
+const Spotify = require('./api-calls');
 
 
 let clientId = process.env.SPOTIFY_CLIENT_ID;
 let clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 let redirectURI = process.env.SPOTIFY_REDIRECT_URI;
 let stateKey = 'spotify_auth_state';
+// AUTHORIZATION PERMISSIONS: Add needed permissions
+let scope = 'user-read-private user-read-email playlist-modify-private';
 
 /**
  * Generates a random string containing numbers and letters
@@ -31,8 +34,6 @@ let login = (req, res) => {
   let state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  // AUTHORIZATION PERMISSIONS
-  let scope = 'user-read-private user-read-email playlist-modify-private';
 
 
   res.redirect('https://accounts.spotify.com/authorize?' +
@@ -90,14 +91,19 @@ let callback = (req, res) => {
           json: true
         };
 
+        // Get user id, pass on tokens
         return Promise.all([request.getAsync(options), accessToken, refreshToken]);
       } else {
         throw response.statusCode;
       }
     })
+    // create account in db, create playlist on spotify
     .then(([res, accessToken, refreshToken]) => {
       let body = res.body;
-      return db.createAccount(body.id, accessToken, refreshToken);
+      return Promise.all([
+        db.createAccount(body.id, accessToken, refreshToken),
+        Spotify.createPlaylist(accessToken, )
+        ]);
     })
     .then(() => {
       res.redirect('/');
