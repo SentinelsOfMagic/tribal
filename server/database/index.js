@@ -32,7 +32,7 @@ const insertAccount = (accountId, accessToken, refreshToken) => {
 
 // Playlists
 const PlaylistSchema = mongoose.Schema({
-  // playlistHash (id) is auto-generated
+  // playlistHash (_id) is auto-generated
   playlistId: {
     type: String,
     unique: true
@@ -60,29 +60,40 @@ const insertPlaylist = (playlistId, accountId) => {
 // insertPlaylist('6A66KGoajMxC6eE7IgJrE7', '1233151550');
 
 const retrievePlaylist = (playlistHash) => {
-  return Playlist.findById(playlistHash);
+  Playlist.find({_id: playlistHash})
+  .then((playlist) => {
+    console.log('playlist retrieved successfully:', playlist);
+    return playlist;
+  })
+  .catch((err) => {
+    console.log('error occurred while retrieving playlist:', err);
+  });
 };
 
 // Songs
 const SongSchema = mongoose.Schema({
   songId: String,
+  songTitle: String,
+  songArtist: String,
   upvotes: Number,
   downvotes: Number,
   net: Number,
   index: Number,
-  playlistId: String
+  playlistHash: String
 });
 
 const Song = mongoose.model('Song', SongSchema);
 
-const insertSongToPlaylist = (songId, playlistId) => {
+const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist) => {
   var newSong = new Song({
+    playlistHash: playlistHash,
     songId: songId,
+    songTitle: songTitle,
+    songArtist: songArtist,
     upvotes: 0,
     downvotes: 0,
     net: 0,
-    index: null,
-    playlistId: playlistId
+    index: null
   });
 
   newSong.save()
@@ -91,6 +102,54 @@ const insertSongToPlaylist = (songId, playlistId) => {
   })
   .catch((err) => {
     console.log('error occurred while inserting song to playlist:', err);
+  });
+};
+
+const retrieveAllSongsForPlaylist = (playlistHash) => {
+  Song.find({playlistHash: playlistHash})
+  .then((songs) => {
+    console.log('songs for playlist', playlistHash, 'retrieved successfully:', songs);
+  })
+  .catch((err) => {
+    console.log('error occurred while retrieving songs for playlist', playlistHash, ':', err);
+  });
+};
+
+const inputSongUpvote = (playlistHash, songId) => {
+  Song.find({playlistHash: playlistHash, songId: songId})
+  .then((song) => {
+    song.upvotes++;
+    song.net = song.upvotes - song.downvotes;
+
+    song.save()
+    .then((upvotedSong) => {
+      console.log('song upvote successfully inserted:', upvotedSong);
+    })
+    .catch((err) => {
+      console.log('error occurred while saving upvoted song:', err);
+    });
+  })
+  .catch((err) => {
+    console.log('error occurred while finding song to upvote:', err);
+  });
+};
+
+const inputSongDownvote = (playlistHash, songId) => {
+  Song.find({playlistHash: playlistHash, songId: songId})
+  .then((song) => {
+    song.downvotes++;
+    song.net = song.upvotes - song.downvotes;
+
+    song.save()
+    .then((downvotedSong) => {
+      console.log('song downvote successfully inserted:', downvotedSong);
+    })
+    .catch((err) => {
+      console.log('error occurred while saving downvoted song:', err);
+    });
+  })
+  .catch((err) => {
+    console.log('error occurred while finding song to downvote:', err);
   });
 };
 
@@ -144,6 +203,10 @@ module.exports.insertAccount = insertAccount;
 module.exports.insertPlaylist = insertPlaylist;
 module.exports.retrievePlaylist = retrievePlaylist;
 module.exports.insertSongToPlaylist = insertSongToPlaylist;
+module.exports.retrieveAllSongsForPlaylist = retrieveAllSongsForPlaylist;
+module.exports.inputSongUpvote = inputSongUpvote;
+module.exports.inputSongDownvote = inputSongDownvote;
+
 
 // old exports
 module.exports.getAllPlaylists = getAllPlaylists;
