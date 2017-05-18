@@ -14,7 +14,8 @@ angular.module('tribal')
 .directive('main', function() {
   return {
     scope: {
-      playlistUri: '<'
+      playlistUri: '<',
+      clickTitle: '<'
     },
     restrict: 'E',
     controller: 'MainController',
