@@ -79,6 +79,19 @@ app.get('/tracks', (req, res) => {
   });
 });
 
+app.get('/playlist', (req, res) => {
+  console.log('made it to server: ', req.query);
+  // search db sessions table using playlist hash
+  // get row from db as object
+  // { user_id, playlist_id, access_token, refresh_token }
+  // call Spotify API https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}
+  // get playlist uri for embedding
+  var dummyUri = 'spotify:user:1233151550:playlist:6A66KGoajMxC6eE7IgJrE7';
+  res.send(dummyUri);
+  // if unable to find anything in db
+  // res.sendStatus(404);
+});
+
 // socket.io framework
 io.on( 'connection', function(client) {
 
