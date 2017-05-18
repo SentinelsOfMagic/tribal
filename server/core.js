@@ -20,9 +20,9 @@ app.use(cookieParser());
 
 app.use((req, res, next) => {
   if (process.env.DEPLOY_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
-    res.redirect('https://tribal2.herokuapp.com' + req.url);
+    res.redirect(process.env.HOST + req.url);
   } else if (process.env.DEPLOY_ENV === 'staging' && req.headers['x-forwarded-proto'] !== 'https') {
-    res.redirect('https://tribal2-staging.herokuapp.com' + req.url);
+    res.redirect(process.env.HOST + req.url);
     // warmsea is Connor's dev staging to check URLs before staging pull requests
   } else if (process.env.DEPLOY_ENV === 'warmsea' && req.headers['x-forwarded-proto'] !== 'https') {
     res.redirect('https://warm-sea-98216.herokuapp.com' + req.url);
