@@ -18,6 +18,7 @@ h2 {
   color: #CC6622;
   text-align: center;
   font-size: 24px;
+<<<<<<< HEAD
 }
 
 a {
@@ -27,6 +28,13 @@ a {
 
 input {
   font-size: 15px;
+=======
+>>>>>>> df89f19e50b18a7db01540d7f091929f227c2937
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
 }
 
 #tribeList {
