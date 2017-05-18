@@ -84,9 +84,24 @@ app.get('/tracks', (req, res) => {
   });
 });
 
-app.get('/thereThere', (req, res) => {
+app.get('/grabSongsData', (req, res) => {
+  db.getSongs(req.query.playlist)
+    .then((data)=>{
+      console.log('all the songs with playlist hash', data);
+      res.send(data);
+      //expect to get a list of the songs for that playlist hash
+    })
+    .catch(err => {
+      console.log('trouble grabbing the data', err);
+    });
+});
+
+app.get('/inputVotes', (req, res) => {
   // console.log('expect voteUpDown', req.query.vote);
   if (req.query.vote === 'upvote') {
+    //do i need to query the database for the current upvote number
+    //for that song, save it to a variable, add one to the variable,
+    //and then insert that number into the database?
     console.log('its an upvote', req.query.vote);
     //input upvote for song
     //need access to songid/song title to know where to insert
