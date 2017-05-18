@@ -38,6 +38,11 @@ input {
   font-size: 15px;
 }
 
+a {
+  color: #fff;
+  text-decoration: none;
+}
+
 #tribeList {
   text-align: center;
   width: 400px;
