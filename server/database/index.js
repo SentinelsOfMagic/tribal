@@ -13,20 +13,19 @@ const AccountSchema = mongoose.Schema({
 const Account = mongoose.model('Account', AccountSchema);
 
 const insertAccount = (accountId, accessToken, refreshToken) => {
-  var newAccount = new Account({
-    accountId: accountId,
-    accessToken: accessToken,
-    refreshToken: refreshToken
-  });
+  return Account.findOneAndUpdate(
+    {accountId: accountId},
+    {accessToken: accessToken, refreshToken: refreshToken},
+    {upsert: true, new: true});
 
-  return newAccount.save()
-  .then((account) => {
-    console.log('new account successfully saved to db:', account);
-    return account;
-  })
-  .catch((err) => {
-    console.log('error occurred while saving new account to db:', err);
-  });
+  // return newAccount.save()
+  // .then((account) => {
+  //   console.log('new account successfully saved to db:', account);
+  //   return account;
+  // })
+  // .catch((err) => {
+  //   console.log('error occurred while saving new account to db:', err);
+  // });
 };
 
 
