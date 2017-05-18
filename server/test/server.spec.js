@@ -39,11 +39,11 @@ describe( 'tribal server:', function() {
         });
     });
 
-    describe( 'getAllPlayLists', function() {
+    describe( 'getAllPlaylists', function() {
 
       it( 'reads all playlists', function() {
 
-        return db.getAllPlayLists()
+        return db.getAllPlaylists()
           .then( (playlists) => {
             playlists = playlists.map( (playlist) => playlist.toObject() );
             playlists = _(playlists).sortBy( '_id' );
@@ -53,13 +53,13 @@ describe( 'tribal server:', function() {
       });
     });
 
-    describe( 'getSinglePlayList', function() {
+    describe( 'getSinglePlaylist', function() {
 
       it( 'correctly finds a playlist by id', function() {
 
         let expectedPlayList = testData.playlists[0];
 
-        return db.getSinglePlayList(expectedPlayList._id.toString())
+        return db.getSinglePlaylist(expectedPlayList._id.toString())
           .then( (playlist) => {
             playlist = playlist.toObject();
             expect(playlist).to.deep.equal(expectedPlayList);
@@ -70,7 +70,7 @@ describe( 'tribal server:', function() {
 
         let expectedPlayList = testData.playlists[0];
 
-        return db.getSinglePlayList(expectedPlayList.name)
+        return db.getSinglePlaylist(expectedPlayList.name)
           .then( (playlist) => {
             playlist = playlist.toObject();
             expect(playlist).to.deep.equal(expectedPlayList);
@@ -95,19 +95,19 @@ describe( 'tribal server:', function() {
       });
     });
 
-    describe( 'createPlayList', function() {
+    describe( 'createPlaylist', function() {
 
       let newListName = 'newList';
 
       it( 'successfully creates a playlist with the supplied name', function() {
 
-        return db.getSinglePlayList(newListName)
+        return db.getSinglePlaylist(newListName)
           .then( (list) => {
             expect(list).to.be.null;
-            return db.createPlayList(newListName);
+            return db.createPlaylist(newListName);
           })
           .then( () => {
-            return db.getSinglePlayList(newListName);
+            return db.getSinglePlaylist(newListName);
           })
           .then( (newList) => {
             expect(newList instanceof db.mongoose.Model).to.be.true;
@@ -116,7 +116,7 @@ describe( 'tribal server:', function() {
 
       it( 'returns the new playlist with the resolved promise', function() {
 
-        return db.createPlayList(newListName)
+        return db.createPlaylist(newListName)
           .then( (newList) => {
             expect(newList instanceof db.mongoose.Model).to.be.true;
             expect(newList.name).to.equal(newListName);
@@ -125,7 +125,7 @@ describe( 'tribal server:', function() {
 
       it( 'creates a playlist with no songs', function() {
 
-        return db.createPlayList(newListName)
+        return db.createPlaylist(newListName)
           .then( (newList) => {
             expect(newList.songs.length).to.equal(0);
           });
