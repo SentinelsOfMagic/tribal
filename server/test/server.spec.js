@@ -39,100 +39,100 @@ describe( 'tribal server:', function() {
         });
     });
 
-    describe( 'getAllPlayLists', function() {
+  //   describe( 'getAllPlaylists', function() {
 
-      it( 'reads all playlists', function() {
+  //     it( 'reads all playlists', function() {
 
-        return db.getAllPlayLists()
-          .then( (playlists) => {
-            playlists = playlists.map( (playlist) => playlist.toObject() );
-            playlists = _(playlists).sortBy( '_id' );
-            let expected = _(testData.playlists).sortBy( '_id' );
-            expect(playlists).to.deep.equal(expected);
-          });
-      });
-    });
+  //       return db.getAllPlaylists()
+  //         .then( (playlists) => {
+  //           playlists = playlists.map( (playlist) => playlist.toObject() );
+  //           playlists = _(playlists).sortBy( '_id' );
+  //           let expected = _(testData.playlists).sortBy( '_id' );
+  //           expect(playlists).to.deep.equal(expected);
+  //         });
+  //     });
+  //   });
 
-    describe( 'getSinglePlayList', function() {
+  //   describe( 'getSinglePlaylist', function() {
 
-      it( 'correctly finds a playlist by id', function() {
+  //     it( 'correctly finds a playlist by id', function() {
 
-        let expectedPlayList = testData.playlists[0];
+  //       let expectedPlayList = testData.playlists[0];
 
-        return db.getSinglePlayList(expectedPlayList._id.toString())
-          .then( (playlist) => {
-            playlist = playlist.toObject();
-            expect(playlist).to.deep.equal(expectedPlayList);
-          });
-      });
+  //       return db.getSinglePlaylist(expectedPlayList._id.toString())
+  //         .then( (playlist) => {
+  //           playlist = playlist.toObject();
+  //           expect(playlist).to.deep.equal(expectedPlayList);
+  //         });
+  //     });
 
-      it( 'correctly finds a playlist by name', function() {
+  //     it( 'correctly finds a playlist by name', function() {
 
-        let expectedPlayList = testData.playlists[0];
+  //       let expectedPlayList = testData.playlists[0];
 
-        return db.getSinglePlayList(expectedPlayList.name)
-          .then( (playlist) => {
-            playlist = playlist.toObject();
-            expect(playlist).to.deep.equal(expectedPlayList);
-          });
-      });
-    });
+  //       return db.getSinglePlaylist(expectedPlayList.name)
+  //         .then( (playlist) => {
+  //           playlist = playlist.toObject();
+  //           expect(playlist).to.deep.equal(expectedPlayList);
+  //         });
+  //     });
+  //   });
 
-    describe( 'insertSong', function() {
+  //   describe( 'insertSong', function() {
 
-      it( 'correctly adds a song to a playlist', function() {
+  //     it( 'correctly adds a song to a playlist', function() {
 
-        let newSong = { uri: 'spotify:track:6HLJuAenKW89zYAZOstC2z' };
-        let expectedPlayList = _(testData.playlists[0]).clone();
-        expectedPlayList.songs.push( newSong );
-        let playListId = expectedPlayList._id;
+  //       let newSong = { uri: 'spotify:track:6HLJuAenKW89zYAZOstC2z' };
+  //       let expectedPlayList = _(testData.playlists[0]).clone();
+  //       expectedPlayList.songs.push( newSong );
+  //       let playListId = expectedPlayList._id;
 
-        return db.insertSong(playListId, newSong)
-          .then( (actualPlayList) => {
-            let actualSongs = actualPlayList.songs.map( (song) => ({ uri: song.uri }) );
-            expect(actualSongs).to.deep.equal(expectedPlayList.songs);
-          });
-      });
-    });
+  //       return db.insertSong(playListId, newSong)
+  //         .then( (actualPlayList) => {
+  //           let actualSongs = actualPlayList.songs.map( (song) => ({ uri: song.uri }) );
+  //           expect(actualSongs).to.deep.equal(expectedPlayList.songs);
+  //         });
+  //     });
+  //   });
 
-    describe( 'createPlayList', function() {
+  //   describe( 'createPlaylist', function() {
 
-      let newListName = 'newList';
+  //     let newListName = 'newList';
 
-      it( 'successfully creates a playlist with the supplied name', function() {
+  //     it( 'successfully creates a playlist with the supplied name', function() {
 
-        return db.getSinglePlayList(newListName)
-          .then( (list) => {
-            expect(list).to.be.null;
-            return db.createPlayList(newListName);
-          })
-          .then( () => {
-            return db.getSinglePlayList(newListName);
-          })
-          .then( (newList) => {
-            expect(newList instanceof db.mongoose.Model).to.be.true;
-          });
-      });
+  //       return db.getSinglePlaylist(newListName)
+  //         .then( (list) => {
+  //           expect(list).to.be.null;
+  //           return db.createPlaylist(newListName);
+  //         })
+  //         .then( () => {
+  //           return db.getSinglePlaylist(newListName);
+  //         })
+  //         .then( (newList) => {
+  //           expect(newList instanceof db.mongoose.Model).to.be.true;
+  //         });
+  //     });
 
-      it( 'returns the new playlist with the resolved promise', function() {
+  //     it( 'returns the new playlist with the resolved promise', function() {
 
-        return db.createPlayList(newListName)
-          .then( (newList) => {
-            expect(newList instanceof db.mongoose.Model).to.be.true;
-            expect(newList.name).to.equal(newListName);
-          });
-      });
+  //       return db.createPlaylist(newListName)
+  //         .then( (newList) => {
+  //           expect(newList instanceof db.mongoose.Model).to.be.true;
+  //           expect(newList.name).to.equal(newListName);
+  //         });
+  //     });
 
-      it( 'creates a playlist with no songs', function() {
+  //     it( 'creates a playlist with no songs', function() {
 
-        return db.createPlayList(newListName)
-          .then( (newList) => {
-            expect(newList.songs.length).to.equal(0);
-          });
-      });
-    });
+  //       return db.createPlaylist(newListName)
+  //         .then( (newList) => {
+  //           expect(newList.songs.length).to.equal(0);
+  //         });
+  //     });
+  //   });
 
-  });
+  // });
 
   describe( 'HTTP request handling', function() {
 
