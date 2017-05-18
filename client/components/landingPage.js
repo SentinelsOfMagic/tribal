@@ -16,7 +16,7 @@ angular.module('tribal')
     this.showForm = false;
   };
   this.submitPlaylist = (hash) => {
-    console.log('submit playlist input: ', hash);
+    console.log('input: ', hash);
     tribalServer.checkPlaylistHash(hash)
       .then(res => {
         console.log('uri: ', res.data);
