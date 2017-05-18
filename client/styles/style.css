@@ -121,7 +121,8 @@ th, td {
 .addSongButton,
 #searchButton,
 .landing-button,
-.enter-button {
+.enter-button,
+.vote-button {
   border: none;
   background-color: black;
   border-radius: 15px;
