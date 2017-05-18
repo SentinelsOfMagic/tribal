@@ -42,14 +42,18 @@ const insertPlaylist = (playlistId, accountId) => {
   })
   .then((playlist) => {
     console.log('playlist successfully inserted to db:', playlist);
+    return playlist._id;
   })
   .catch((err) => {
     console.log('error occurred while inserting new playlist:', err);
   });
 };
 
-const retrievePlaylist = (playlistId) => {
-  return Playlist.findById(playlistId);
+// DELETE LATER - just dummy data that April is using
+// insertPlaylist('6A66KGoajMxC6eE7IgJrE7', '1233151550');
+
+const retrievePlaylist = (playlistHash) => {
+  return Playlist.findById(playlistHash);
 };
 
 // Songs
