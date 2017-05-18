@@ -2,7 +2,10 @@ const mongoose = require( './init' );
 
 // Users
 const AccountSchema = mongoose.Schema({
-  accountId: String,
+  accountId: {
+    type: String,
+    unique: true
+  },
   accessToken: String,
   refreshToken: String
 });
@@ -29,7 +32,10 @@ const insertAccount = (accountId, accessToken, refreshToken) => {
 // Playlists
 const PlaylistSchema = mongoose.Schema({
   // playlistHash (id) is auto-generated
-  playlistId: String,
+  playlistId: {
+    type: String,
+    unique: true
+  },
   accountId: String
 });
 
