@@ -79,6 +79,18 @@ app.get('/tracks', (req, res) => {
   });
 });
 
+app.get('/thereThere', (req, res) => {
+  // console.log('expect voteUpDown', req.query.vote);
+  if (req.query.vote === 'upvote') {
+    console.log('its an upvote', req.query.vote);
+    //input upvote for song
+    //need access to songid/song title to know where to insert
+  } else {
+    console.log('its a downvote', req.query.vote);
+    //input downvote
+  }
+});
+
 app.get('/playlist', (req, res) => {
   console.log('made it to server: ', req.query);
   // search db sessions table using playlist hash
