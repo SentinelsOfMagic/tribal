@@ -1,7 +1,10 @@
 // Adapted from spotify web-api-auth-example
 
+const Promise = require('bluebird');
 const querystring = require('querystring');
-const request = require('request');
+const request = Promise.promisifyAll(require('request'));
+const db = require('../database');
+
 
 let clientId = process.env.SPOTIFY_CLIENT_ID;
 let clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -24,13 +27,14 @@ let generateRandomString = (length) => {
 };
 
 let login = (req, res) => {
-  console.log('LOGIN');
 
   let state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  // your application requests authorization
-  let scope = 'user-read-private user-read-email';
+  // AUTHORIZATION PERMISSIONS
+  let scope = 'user-read-private user-read-email playlist-modify-private';
+
+
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       'response_type': 'code',
@@ -70,11 +74,15 @@ let callback = (req, res) => {
       json: true
     };
 
-    request.post(authOptions, function(error, response, body) {
-      if (!error && response.statusCode === 200) {
+    request.postAsync(authOptions)
+    .then((response) => {
+      let body = response.body;
+
+      if (response.statusCode === 200) {
 
         let accessToken = body.access_token;
         let refreshToken = body.refresh_token;
+        console.log('GET TOKEN', body);
 
         let options = {
           url: 'https://api.spotify.com/v1/me',
@@ -82,23 +90,24 @@ let callback = (req, res) => {
           json: true
         };
 
-        // use the access token to access the Spotify Web API
-        request.get(options, function(error, response, body) {
-          console.log(body);
-        });
-
-        // we can also pass the token to the browser to make requests from there
-        res.redirect('/#' +
-          querystring.stringify({
-            'access_token': accessToken,
-            'refresh_token': refreshToken
-          }));
+        return Promise.all([request.getAsync(options), accessToken, refreshToken]);
       } else {
-        res.redirect('/#' +
-          querystring.stringify({
-            error: 'invalid_token'
-          }));
+        throw response.statusCode;
       }
+    })
+    .then(([res, accessToken, refreshToken]) => {
+      let body = res.body;
+      return db.createAccount(body.id, accessToken, refreshToken);
+    })
+    .then(() => {
+      res.redirect('/');
+    })
+    .catch((err) => {
+      console.log(err);
+      res.redirect('/#' +
+          querystring.stringify({
+            error: err
+          }));
     });
   }
 };
