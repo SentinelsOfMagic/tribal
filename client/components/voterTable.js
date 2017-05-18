@@ -6,7 +6,7 @@ angular.module('tribal')
     tribalServer.insertVotes(vote);
   };
 
-  tribalServer.grabSongsFromPlaylist()
+  tribalServer.grabSongsFromPlaylist(this.playlisthash)
     .then(res => {
       console.log('array of songs', res.data);
       this.songsFromPlaylist = res.data;
@@ -19,7 +19,7 @@ angular.module('tribal')
 .directive('voterTable', function() {
   return {
     scope: {
-      hash: '<'
+      playlistHash: '<'
     },
     restrict: 'E',
     controller: 'voterTableController',
