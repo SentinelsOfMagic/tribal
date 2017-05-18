@@ -14,15 +14,15 @@ h1 {
   font-family: 'Barrio', cursive;
 }
 
-a {
-  color: #fff;
-  text-decoration: none;
-}
-
 h2 {
   color: #CC6622;
   text-align: center;
   font-size: 24px;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
 }
 
 #tribeList {
