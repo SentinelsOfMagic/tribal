@@ -60,14 +60,7 @@ const insertPlaylist = (playlistId, accountId) => {
 // insertPlaylist('6A66KGoajMxC6eE7IgJrE7', '1233151550');
 
 const retrievePlaylist = (playlistHash) => {
-  Playlist.find({_id: playlistHash})
-  .then((playlist) => {
-    console.log('playlist retrieved successfully:', playlist);
-    return playlist;
-  })
-  .catch((err) => {
-    console.log('error occurred while retrieving playlist:', err);
-  });
+  return Playlist.find({_id: playlistHash});
 };
 
 // Songs
@@ -96,7 +89,7 @@ const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist) => {
     index: null
   });
 
-  newSong.save()
+  return newSong.save()
   .then((song) => {
     console.log('song successfully inserted to database:', song);
   })
@@ -106,7 +99,7 @@ const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist) => {
 };
 
 const retrieveAllSongsForPlaylist = (playlistHash) => {
-  Song.find({playlistHash: playlistHash})
+  return Song.find({playlistHash: playlistHash})
   .then((songs) => {
     console.log('songs for playlist', playlistHash, 'retrieved successfully:', songs);
   })
@@ -116,7 +109,7 @@ const retrieveAllSongsForPlaylist = (playlistHash) => {
 };
 
 const inputSongUpvote = (playlistHash, songId) => {
-  Song.find({playlistHash: playlistHash, songId: songId})
+  return Song.find({playlistHash: playlistHash, songId: songId})
   .then((song) => {
     song.upvotes++;
     song.net = song.upvotes - song.downvotes;
@@ -135,7 +128,7 @@ const inputSongUpvote = (playlistHash, songId) => {
 };
 
 const inputSongDownvote = (playlistHash, songId) => {
-  Song.find({playlistHash: playlistHash, songId: songId})
+  return Song.find({playlistHash: playlistHash, songId: songId})
   .then((song) => {
     song.downvotes++;
     song.net = song.upvotes - song.downvotes;
