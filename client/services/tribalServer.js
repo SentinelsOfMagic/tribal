@@ -6,18 +6,21 @@ const tribalServer = function( $http ) {
     return $http.get( '/test' );
   };
 
-  this.putStuffInDataBase = function(vote) {
+  this.insertVotes = function(vote) {
     console.log('where will i see this?', vote);
-    return $http.get('/thereThere', {
+    return $http.get('/inputVotes', {
       params: {
         vote: vote
-
       }
     });
   };
 
   this.grabSongsFromPlaylist = function(hash) {
-
+    return $http.get('/grabSongsData', {
+      params: {
+        playlist: hash
+      }
+    });
   };
 
   // get (new or existing) playlist from server
