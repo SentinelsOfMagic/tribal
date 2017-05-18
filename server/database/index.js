@@ -19,7 +19,7 @@ const insertAccount = (accountId, accessToken, refreshToken) => {
     refreshToken: refreshToken
   });
 
-  newAccount.save()
+  return newAccount.save()
   .then((account) => {
     console.log('new account successfully saved to db:', account);
     return account;
