@@ -1,14 +1,12 @@
 angular.module('tribal')
 
-.controller('LandingPageCtrl', function(tribalServer) {
+.controller('LandingPageCtrl', function($location, tribalServer) {
   this.showForm = false;
   this.showError = false;
   this.showMain = false;
   this.showInit = true;
   this.playlistUri = '';
-  this.createPlaylist = ($event) => {
-    console.log('create playlist click - need to redict to Spotify login');
-  };
+  this.playlistHash = $location.search().playlist;
   this.existingPlaylist = ($event) => {
     this.showForm = true;
   };
@@ -23,12 +21,16 @@ angular.module('tribal')
         this.playlistUri = res.data;
         this.showMain = true;
         this.showInit = false;
+        $location.search('playlist', hash);
       })
       .catch(err => {
         console.log('error: ', err);
         this.showError = true;
       });
   };
+  if (this.playlistHash) {
+    this.submitPlaylist(this.playlistHash);
+  }
 })
 
 .directive('landingPage', function() {
