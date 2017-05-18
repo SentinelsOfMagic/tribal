@@ -97,7 +97,7 @@ let callback = (req, res) => {
     })
     .then(([res, accessToken, refreshToken]) => {
       let body = res.body;
-      return db.createAccount(body.id, accessToken, refreshToken);
+      return db.insertAccount(body.id, accessToken, refreshToken);
     })
     .then(() => {
       res.redirect('/');

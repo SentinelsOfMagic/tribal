@@ -9,7 +9,7 @@ const AccountSchema = mongoose.Schema({
 
 const Account = mongoose.model('Account', AccountSchema);
 
-const createAccount = (accountId, accessToken, refreshToken) => {
+const insertAccount = (accountId, accessToken, refreshToken) => {
   var newAccount = new Account({
     accountId: accountId,
     accessToken: accessToken,
@@ -17,8 +17,8 @@ const createAccount = (accountId, accessToken, refreshToken) => {
   });
 
   newAccount.save()
-  .then(() => {
-    console.log('new account saved to db successfully');
+  .then((account) => {
+    console.log('new account successfully saved to db:', account);
   })
   .catch((err) => {
     console.log('error occurred while saving new account to db:', err);
@@ -35,17 +35,53 @@ const PlaylistSchema = mongoose.Schema({
 
 const Playlist = mongoose.model('Playlist', PlaylistSchema);
 
+const insertPlaylist = (playlistId, accountId) => {
+  Playlist.create({
+    playlistId: playlistId,
+    accountId: accountId
+  })
+  .then((playlist) => {
+    console.log('playlist successfully inserted to db:', playlist);
+  })
+  .catch((err) => {
+    console.log('error occurred while inserting new playlist:', err);
+  });
+};
+
+const retrievePlaylist = (playlistId) => {
+  return Playlist.findById(playlistId);
+};
+
 // Songs
 const SongSchema = mongoose.Schema({
-  spotifyId: String,
+  songId: String,
   upvotes: Number,
   downvotes: Number,
   net: Number,
   index: Number,
-  playlistId: Number
+  playlistId: String
 });
 
 const Song = mongoose.model('Song', SongSchema);
+
+const insertSongToPlaylist = (songId, playlistId) => {
+  var newSong = new Song({
+    songId: songId,
+    upvotes: 0,
+    downvotes: 0,
+    net: 0,
+    index: null,
+    playlistId: playlistId
+  });
+
+  newSong.save()
+  .then((song) => {
+    console.log('song successfully inserted to database:', song);
+  })
+  .catch((err) => {
+    console.log('error occurred while inserting song to playlist:', err);
+  });
+};
 
 
 
@@ -93,7 +129,12 @@ const createPlaylist = function( name ) {
 };
 
 module.exports.mongoose = mongoose;
-module.exports.createAccount = createAccount;
+module.exports.insertAccount = insertAccount;
+module.exports.insertPlaylist = insertPlaylist;
+module.exports.retrievePlaylist = retrievePlaylist;
+module.exports.insertSongToPlaylist = insertSongToPlaylist;
+
+// old exports
 module.exports.getAllPlaylists = getAllPlaylists;
 module.exports.getSinglePlaylist = getSinglePlaylist;
 module.exports.insertSong = insertSong;
