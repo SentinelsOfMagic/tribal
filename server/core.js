@@ -89,7 +89,7 @@ app.get('/playlist', (req, res) => {
   var dummyUri = 'spotify:user:1233151550:playlist:6A66KGoajMxC6eE7IgJrE7';
   res.send(dummyUri);
   // if unable to find anything in db
-  // res.sendStatus(404);
+    // res.sendStatus(404);
 });
 
 // socket.io framework
