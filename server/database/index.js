@@ -64,16 +64,16 @@ const OldPlayList = mongoose.model('OldPlayList', OldPlayListSchema);
 
 // getAllPlayLists retrieves all playlists
 const getAllPlaylists = function() {
-  return OldPlaylist.find({});
+  return OldPlayList.find({});
 };
 
 // getSinglePlayList retrieves a single PlayList associated with the given id or name
 // returns promise, resolves with playlist document
 const getSinglePlaylist = function( idOrName ) {
   if ( /^[0-9a-f]{24}$/.test(idOrName) ) {
-    return OldPlaylist.findById( idOrName );
+    return OldPlayList.findById( idOrName );
   } else {
-    return OldPlaylist.findOne({ name: idOrName });
+    return OldPlayList.findOne({ name: idOrName });
   }
 };
 
@@ -89,7 +89,7 @@ const insertSong = function(id, song) {
 // create a new playlist, 'name', populated with no songs
 // return promise, resolves with new document
 const createPlaylist = function( name ) {
-  return OldPlaylist.create({ name: name });
+  return OldPlayList.create({ name: name });
 };
 
 module.exports.mongoose = mongoose;
