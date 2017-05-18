@@ -1,17 +1,26 @@
 angular.module('tribal')
 .controller('voterTableController', function(tribalServer) {
-  this.friends = [{}, {}, {}];
+
+  this.songsFromPlaylist = [{}, {}, {}];
   this.someEventHandler = (vote) => {
-    tribalServer.putStuffInDataBase(vote);
+    tribalServer.insertVotes(vote);
   };
-  //tribalServer.grabSongsFromPlaylist = function(playlistHash) {
-    //
-  // }
+
+  tribalServer.grabSongsFromPlaylist()
+    .then(res => {
+      console.log('array of songs', res.data);
+      this.songsFromPlaylist = res.data;
+    })
+    .catch(err => {
+      console.log('trouble getting the songs in frontend', err);
+    });
 })
 
 .directive('voterTable', function() {
   return {
-    scope: {},
+    scope: {
+      hash: '<'
+    },
     restrict: 'E',
     controller: 'voterTableController',
     controllerAs: 'ctrl',
