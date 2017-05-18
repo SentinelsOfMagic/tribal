@@ -14,15 +14,33 @@ h1 {
   font-family: 'Barrio', cursive;
 }
 
+h2 {
+  color: #CC6622;
+  text-align: center;
+  font-size: 24px;
+}
+
 a {
   color: #fff;
   text-decoration: none;
 }
 
-h2 {
-  color: #CC6622;
-  text-align: center;
-  font-size: 24px;
+input {
+  font-size: 15px;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+}
+
+input {
+  font-size: 15px;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
 }
 
 #tribeList {
@@ -154,10 +172,3 @@ th, td {
   box-shadow: none;
 }
 
-#playlist {
-  height: auto;
-  width: 60%;
-  font-weight: bold;
-  padding: 3px;
-  margin-left: 15%;
-}

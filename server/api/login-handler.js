@@ -101,7 +101,7 @@ let callback = (req, res) => {
     .then(([res, accessToken, refreshToken]) => {
       let body = res.body;
       return Promise.all([
-        db.createAccount(body.id, accessToken, refreshToken),
+        db.insertAccount(body.id, accessToken, refreshToken),
         Spotify.createPlaylist(accessToken, )
         ]);
     })

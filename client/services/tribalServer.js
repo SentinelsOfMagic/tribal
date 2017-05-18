@@ -6,6 +6,16 @@ const tribalServer = function( $http ) {
     return $http.get( '/test' );
   };
 
+  this.putStuffInDataBase = function(vote) {
+    console.log('where will i see this?', vote);
+    return $http.get('/thereThere', {
+      params: {
+        vote: vote
+
+      }
+    });
+  };
+
   // get (new or existing) playlist from server
   this.getPlaylist = function( playlistId, callback ) {
     socket.emit( 'playlist', playlistId, callback );
@@ -29,7 +39,7 @@ const tribalServer = function( $http ) {
   };
 
   this.checkPlaylistHash = function(hash) {
-    console.log('made it to tribal server: ', hash);
+    console.log('tribal server: ', hash);
     return $http.get('/playlist', {
       params: {
         playlist: hash
