@@ -97,7 +97,7 @@ io.on( 'connection', function(client) {
     if ( playlistId ) {
       console.log( `Client requesting playlist ${playlistId}` );
 
-      p = db.getSinglePlayList( playlistId )
+      p = db.getSinglePlaylist( playlistId )
         .then( (doc) => {
           if ( !doc ) {
             throw new Error( 'playListNotFound' );
@@ -107,13 +107,13 @@ io.on( 'connection', function(client) {
         .catch(
           (err) => (err.message === 'playListNotFound' ),
           () => {
-            return db.createPlayList();
+            return db.createPlaylist();
           });
 
     } else {
 
       console.log( 'Client requesting new playlist' );
-      p = db.createPlayList();
+      p = db.createPlaylist();
     }
 
     p.then( (doc) => {
