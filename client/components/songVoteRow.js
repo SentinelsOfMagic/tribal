@@ -1,6 +1,6 @@
-const SongVoteController = function(tribalServer) {
-  this.someEventHandler = () => {
-    tribalServer.putStuffInDataBase();
+const SongVoteController = function(tribalServer, vote) {
+  this.someEventHandler = (vote) => {
+    tribalServer.putStuffInDataBase(vote);
   };
 };
 

@@ -6,11 +6,12 @@ const tribalServer = function( $http ) {
     return $http.get( '/test' );
   };
 
-  this.putStuffInDataBase = function() {
-    console.log('where will i see this?');
+  this.putStuffInDataBase = function(vote) {
+    console.log('where will i see this?', vote);
     return $http.get('/thereThere', {
       params: {
-        vote: 'heheheh'
+        vote: vote
+
       }
     });
   };
