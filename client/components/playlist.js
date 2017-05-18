@@ -1,4 +1,6 @@
-const PlaylistController = function( tribalServer, $location, $scope ) {
+angular.module('tribal')
+
+.controller('PlaylistController', function(tribalServer, $location) {
 
 //   this.songAddedHandler = (uri) => {
 //     this.playlist.push({ uri: uri });
@@ -7,24 +9,24 @@ const PlaylistController = function( tribalServer, $location, $scope ) {
 
   // tribalServer.registerSongAddedHandler( this.songAddedHandler );
 
-  tribalServer.getPlaylist( $location.search().playlist, (res) => {
-    $location.search( 'playlist', res._id );
-    this.playlist = res.songs;
-    $scope.$apply();
-  });
-};
+  // tribalServer.getPlaylist( $location.search().playlist, (res) => {
+  //   $location.search( 'playlist', res._id );
+  //   this.playlist = res.songs;
+  //   $scope.$apply();
+  // });
 
-const Playlist = function() {
+})
+
+.directive('playlist', function() {
   return {
     scope: {
-      playlistUri: '<'
+      playlistUri: '<',
     },
     restrict: 'E',
-    controller: [ 'tribalServer', '$location', '$scope', PlaylistController ],
+    controller: 'PlaylistController',
     controllerAs: 'ctrl',
     bindToController: true,
     templateUrl: '/templates/playlist.html'
   };
-};
+});
 
-angular.module('tribal').directive('playlist', Playlist);
