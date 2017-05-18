@@ -79,14 +79,16 @@ let callback = (req, res) => {
         let accessToken = body.access_token;
         let refreshToken = body.refresh_token;
 
-        spotifyApi.setAccessToken(body.access_token);
-
         let options = {
           url: 'https://api.spotify.com/v1/me',
           headers: { 'Authorization': 'Bearer ' + accessToken },
           json: true
         };
 
+        request.getAsync(options)
+        .then((res) => {
+          console.log(res.body);
+        });
         // TODO: Load user into database
 
         // we can also pass the token to the browser to make requests from there
