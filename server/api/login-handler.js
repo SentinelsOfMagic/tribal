@@ -99,15 +99,18 @@ let callback = (req, res) => {
     // create account in db, create playlist on spotify
     .then(([res, accessToken, refreshToken]) => {
       let body = res.body;
+      return db.insertAccount(body.id, accessToken, refreshToken);
+    }).
+    then((account) => {
       let playlistName = generateRandomString(5);
-      return Promise.all([
-        db.insertPlaylist(playlistName, body.id),
-        db.insertAccount(body.id, accessToken, refreshToken),
-        Spotify.createPlaylist(accessToken, body.id, playlistName)
-      ]);
+      return Spotify.createPlaylist(account.accessToken, account.accountId, playlistName);
     })
-    .then(([dbPlaylistId, dbAccount, spotifyPlaylist]) => {
-      res.redirect(`/?playlist=${dbPlaylistId}`);
+    .then((spotifyPlaylist) => {
+      let body = spotifyPlaylist.body;
+      return db.insertPlaylist(body.id, body.owner.id);
+    })
+    .then((dbPlaylist) => {
+      res.redirect(`/?playlist=${dbPlaylist}`);
     })
     .catch((err) => {
       console.log(err);
