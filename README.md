@@ -9,7 +9,7 @@
   - Connor Wilson
   - Ivana He
   - Khoa Vo
-  - 
+
 ### The Justice League
   - James Hogan
   - Kurt Larson
