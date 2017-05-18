@@ -22,6 +22,7 @@ angular.module('tribal')
         this.showMain = true;
         this.showInit = false;
         $location.search('playlist', hash);
+        console.log('submit location: ', $location);
       })
       .catch(err => {
         console.log('error: ', err);
@@ -33,7 +34,7 @@ angular.module('tribal')
     this.showInit = true;
     delete $location.search().playlist;
     $location.url('');
-    $location.absUrl($location.host() + $location.port());
+    $location.absUrl(process.env.HOST);
   };
   if (this.playlistHash) {
     this.submitPlaylist(this.playlistHash);
