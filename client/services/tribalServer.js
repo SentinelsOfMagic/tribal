@@ -16,6 +16,10 @@ const tribalServer = function( $http ) {
     });
   };
 
+  this.grabSongsFromPlaylist = function(hash) {
+
+  };
+
   // get (new or existing) playlist from server
   this.getPlaylist = function( playlistId, callback ) {
     socket.emit( 'playlist', playlistId, callback );

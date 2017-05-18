@@ -1,5 +1,23 @@
 <div>
-  <song-vote-row />
+<table>
+  <tr ng-repeat="friend in ctrl.friends">
+  <td>
+    Title of Song
+  </td>
+  <td>
+    <button type="submit" ng-model='upvote' ng-click="ctrl.someEventHandler('upvote')">
+      👍
+    </button>
+  </td>
+  <td>
+    <button type="submit" ng-model='downvote' ng-click="ctrl.someEventHandler('downvote')" >
+      👎
+    </button>
+  </td>
+</tr>
+</table>
 </div>
+
+
 
 

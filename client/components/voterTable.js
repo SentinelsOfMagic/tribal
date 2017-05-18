@@ -1,15 +1,40 @@
-const VoterTable = function() {
+angular.module('tribal')
+.controller('voterTableController', function(tribalServer) {
+  this.friends = [{}, {}, {}];
+  this.someEventHandler = (vote) => {
+    tribalServer.putStuffInDataBase(vote);
+  };
+  //tribalServer.grabSongsFromPlaylist = function(playlistHash) {
+    //
+  // }
+})
+
+.directive('voterTable', function() {
   return {
-    scope: {
-      ownerId: '<',
-      playlistId: '<'
-    },
+    scope: {},
     restrict: 'E',
-    controller: () => {},
+    controller: 'voterTableController',
     controllerAs: 'ctrl',
     bindToController: true,
     templateUrl: '/templates/voterTable.html'
   };
-};
+});
 
-angular.module('tribal').directive('voterTable', VoterTable);
+
+
+
+// const VoterTable = function() {
+//   return {
+//     scope: {
+//       ownerId: '<',
+//       playlistId: '<'
+//     },
+//     restrict: 'E',
+//     controller: () => {},
+//     controllerAs: 'ctrl',
+//     bindToController: true,
+//     templateUrl: '/templates/voterTable.html'
+//   };
+// };
+
+// angular.module('tribal').directive('voterTable', VoterTable);
