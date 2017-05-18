@@ -121,7 +121,8 @@ th, td {
 .addSongButton,
 #searchButton,
 .landing-button,
-.enter-button {
+.enter-button,
+.vote-button {
   border: none;
   background-color: black;
   border-radius: 15px;
@@ -139,12 +140,18 @@ th, td {
 
 #songSearch:focus,
 #searchButton:focus,
-.addSongButton:focus {
+.addSongButton:focus,
+.landing-button:focus,
+.enter-button:focus,
+.vote-button:focus {
   outline: none;
 }
 
 #searchButton:active,
-.addSongButton:active {
+.addSongButton:active,
+.landing-button:active,
+.enter-button:active,
+.vote-button:active {
   background-color: #1ED760;
 }
 

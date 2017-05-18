@@ -28,6 +28,13 @@ angular.module('tribal')
         this.showError = true;
       });
   };
+  this.clickTitle = ($event) => {
+    this.showMain = false;
+    this.showInit = true;
+    delete $location.search().playlist;
+    $location.url('');
+    $location.absUrl($location.host() + $location.port());
+  };
   if (this.playlistHash) {
     this.submitPlaylist(this.playlistHash);
   }
