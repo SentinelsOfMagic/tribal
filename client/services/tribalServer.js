@@ -6,6 +6,15 @@ const tribalServer = function( $http ) {
     return $http.get( '/test' );
   };
 
+  this.putStuffInDataBase = function() {
+    console.log('where will i see this?');
+    return $http.get('/thereThere', {
+      params: {
+        vote: 'heheheh'
+      }
+    });
+  };
+
   // get (new or existing) playlist from server
   this.getPlaylist = function( playlistId, callback ) {
     socket.emit( 'playlist', playlistId, callback );

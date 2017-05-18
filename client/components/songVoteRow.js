@@ -1,15 +1,14 @@
 const SongVoteController = function(tribalServer) {
-  this.someEventHandler(this.upVoteOrDownVote);
+  this.someEventHandler = () => {
+    tribalServer.putStuffInDataBase();
+  };
 };
 
-const SongVoteRow = function(tribalServer) {
+const SongVoteRow = function() {
   return {
-    scope: {
-      ownerId: '<',
-      playlistId: '<'
-    },
+    scope: {},
     restrict: 'E',
-    controller: [ 'tribalServer', '$location', '$scope', SongVoteController ],
+    controller: ['tribalServer', SongVoteController],
     controllerAs: 'ctrl',
     bindToController: true,
     templateUrl: '/templates/songVoteRow.html'

@@ -5,7 +5,7 @@ const VoterTable = function() {
       playlistId: '<'
     },
     restrict: 'E',
-    controller: [ ],
+    controller: () => {},
     controllerAs: 'ctrl',
     bindToController: true,
     templateUrl: '/templates/voterTable.html'

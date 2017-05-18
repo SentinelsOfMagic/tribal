@@ -79,6 +79,10 @@ app.get('/tracks', (req, res) => {
   });
 });
 
+app.get('/thereThere', (req, res) => {
+  console.log('expect voteUpDown', req.query);
+});
+
 app.get('/playlist', (req, res) => {
   console.log('made it to server: ', req.query);
   // search db sessions table using playlist hash

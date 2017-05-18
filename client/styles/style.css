@@ -154,10 +154,3 @@ th, td {
   box-shadow: none;
 }
 
-#playlist {
-  height: auto;
-  width: 60%;
-  font-weight: bold;
-  padding: 3px;
-  margin-left: 15%;
-}
