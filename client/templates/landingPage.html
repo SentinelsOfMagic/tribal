@@ -1,7 +1,7 @@
 <div>
   <div ng-if="ctrl.showInit" class="landing-container">
     <H1>TRIBAL</H1>
-    <button class="landing-button" type="button" ng-click="ctrl.createPlaylist()">Create new playlist</button>
+    <button class="landing-button" type="button" ng-click="ctrl.createPlaylist()"><a href="/login">Create new playlist</a></button>
     <button class="landing-button" type="button" ng-click="ctrl.existingPlaylist()">Enter existing playlist</button>
     <div ng-if="ctrl.showForm">
       <input id="hash-input" type="text" ng-model="hash"></input>
