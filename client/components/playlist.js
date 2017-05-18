@@ -1,11 +1,11 @@
 const PlaylistController = function( tribalServer, $location, $scope ) {
 
-  this.songAddedHandler = (uri) => {
-    this.playlist.unshift({ uri: uri });
-    $scope.$apply();
-  };
+//   this.songAddedHandler = (uri) => {
+//     this.playlist.unshift({ uri: uri });
+//     $scope.$apply();
+//   };
 
-  tribalServer.registerSongAddedHandler( this.songAddedHandler );
+  // tribalServer.registerSongAddedHandler( this.songAddedHandler );
 
   tribalServer.getPlaylist( $location.search().playlist, (res) => {
     $location.search( 'playlist', res._id );
@@ -16,7 +16,10 @@ const PlaylistController = function( tribalServer, $location, $scope ) {
 
 const Playlist = function() {
   return {
-    scope: {},
+    scope: {
+      ownerId: '<',
+      playlistId: '<'
+    },
     restrict: 'E',
     controller: [ 'tribalServer', '$location', '$scope', PlaylistController ],
     controllerAs: 'ctrl',
