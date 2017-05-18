@@ -17,8 +17,7 @@ const PlaylistController = function( tribalServer, $location, $scope ) {
 const Playlist = function() {
   return {
     scope: {
-      ownerId: '<',
-      playlistId: '<'
+      playlistUri: '<'
     },
     restrict: 'E',
     controller: [ 'tribalServer', '$location', '$scope', PlaylistController ],
