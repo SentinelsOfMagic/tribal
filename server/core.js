@@ -101,7 +101,7 @@ app.get('/playlist', (req, res) => {
   db.retrievePlaylist(req.query.playlist)
     .then(data => {
       console.log('Playlist data successfully retrieved: ', data);
-      var playlistUri = `spotify:user:${data.accountId}:playlist:${data.playlistId}`;
+      var playlistUri = `spotify:user:${data[0].accountId}:playlist:${data[0].playlistId}`;
       res.send(playlistUri);
     })
     .catch(err => {
