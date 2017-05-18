@@ -1,7 +1,9 @@
 // Adapted from spotify web-api-auth-example
 
+const Promise = require('bluebird');
 const querystring = require('querystring');
-const request = require('request');
+const request = Promise.promisifyAll(require('request'));
+
 
 let clientId = process.env.SPOTIFY_CLIENT_ID;
 let clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -24,13 +26,14 @@ let generateRandomString = (length) => {
 };
 
 let login = (req, res) => {
-  console.log('LOGIN');
 
   let state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  // your application requests authorization
-  let scope = 'user-read-private user-read-email';
+  // AUTHORIZATION PERMISSIONS
+  let scope = 'user-read-private user-read-email playlist-modify-private';
+
+
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       'response_type': 'code',
@@ -76,23 +79,23 @@ let callback = (req, res) => {
         let accessToken = body.access_token;
         let refreshToken = body.refresh_token;
 
+        spotifyApi.setAccessToken(body.access_token);
+
         let options = {
           url: 'https://api.spotify.com/v1/me',
           headers: { 'Authorization': 'Bearer ' + accessToken },
           json: true
         };
 
-        // use the access token to access the Spotify Web API
-        request.get(options, function(error, response, body) {
-          console.log(body);
-        });
+        // TODO: Load user into database
 
         // we can also pass the token to the browser to make requests from there
-        res.redirect('/#' +
-          querystring.stringify({
-            'access_token': accessToken,
-            'refresh_token': refreshToken
-          }));
+        res.redirect('/');
+        // res.redirect('/#' +
+        //   querystring.stringify({
+        //     'access_token': accessToken,
+        //     'refresh_token': refreshToken
+        //   }));
       } else {
         res.redirect('/#' +
           querystring.stringify({

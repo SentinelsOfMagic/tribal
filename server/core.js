@@ -3,7 +3,7 @@ const db = require('./database');
 const Promise = require('bluebird');
 const request = require('request');
 const mongoose = require('mongoose');
-const loginHandler = require('./login-handler.js');
+const Spotify = require('./api');
 const cookieParser = require('cookie-parser');
 
 const app = express();
@@ -32,9 +32,9 @@ app.use((req, res, next) => {
 });
 
 // Spotify login routes
-app.get('/login', loginHandler.login);
-app.get('/callback', loginHandler.callback);
-app.get('/refresh_token', loginHandler.refreshToken);
+app.get('/login', Spotify.login);
+app.get('/callback', Spotify.callback);
+app.get('/refresh_token', Spotify.refreshToken);
 
 // test endpoint for reporting status of database connection
 app.get('/test', (req, res) => {
