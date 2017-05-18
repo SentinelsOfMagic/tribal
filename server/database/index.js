@@ -35,28 +35,6 @@ const PlaylistSchema = mongoose.Schema({
 
 const Playlist = mongoose.model('Playlist', PlaylistSchema);
 
-// // getAllPlayLists retrieves all playlists
-// const getAllPlaylists = function() {
-//   return Playlist.find({});
-// };
-
-// getSinglePlayList retrieves a single PlayList associated with the given id or name
-// returns promise, resolves with playlist document
-const getSinglePlaylist = function( idOrName ) {
-  if ( /^[0-9a-f]{24}$/.test(idOrName) ) {
-    return Playlist.findById( idOrName );
-  } else {
-    return Playlist.findOne({ name: idOrName });
-  }
-};
-
-// create a new playlist, 'name', populated with no songs
-// return promise, resolves with new document
-const createPlaylist = function( name ) {
-  return Playlist.create({ name: name });
-};
-
-
 // Songs
 const SongSchema = mongoose.Schema({
   spotifyId: String,
@@ -69,18 +47,50 @@ const SongSchema = mongoose.Schema({
 
 const Song = mongoose.model('Song', SongSchema);
 
-const insertSong = function() {
 
+
+// OLD STUFF
+
+const OldPlayListSchema = mongoose.Schema({
+  name: {
+    type: String,
+  },
+  songs: [{
+    uri: String
+  }]
+});
+
+const OldPlayList = mongoose.model('OldPlayList', OldPlayListSchema);
+
+// getAllPlayLists retrieves all playlists
+const getAllPlaylists = function() {
+  return OldPlaylist.find({});
+};
+
+// getSinglePlayList retrieves a single PlayList associated with the given id or name
+// returns promise, resolves with playlist document
+const getSinglePlaylist = function( idOrName ) {
+  if ( /^[0-9a-f]{24}$/.test(idOrName) ) {
+    return OldPlaylist.findById( idOrName );
+  } else {
+    return OldPlaylist.findOne({ name: idOrName });
+  }
 };
 
 // insertSong inserts a song(s) into the db
-// const insertSong = function(id, song) {
-//   return getSinglePlaylist( id )
-//     .then(playlist => {
-//       playlist.songs.push(song);
-//       return playlist.save();
-//     });
-// };
+const insertSong = function(id, song) {
+  return getSinglePlaylist( id )
+    .then(playlist => {
+      playlist.songs.push(song);
+      return playlist.save();
+    });
+};
+
+// create a new playlist, 'name', populated with no songs
+// return promise, resolves with new document
+const createPlaylist = function( name ) {
+  return OldPlaylist.create({ name: name });
+};
 
 module.exports.mongoose = mongoose;
 module.exports.createAccount = createAccount;
