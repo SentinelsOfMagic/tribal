@@ -12,6 +12,7 @@ h1 {
   text-align: center;
   font-size: 60px;
   font-family: 'Barrio', cursive;
+  cursor: pointer;
 }
 
 h2 {
@@ -45,7 +46,15 @@ a {
 
 #tribeList {
   text-align: center;
-  width: 400px;
+  width: 600px;
+  font-family: 'Barrio', cursive;
+  font-size: 30px;
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+#vote {
+  text-align: center;
   font-family: 'Barrio', cursive;
   font-size: 30px;
   margin-top: 0;
@@ -54,7 +63,6 @@ a {
 
 div {
   font-size: 16px;
-  padding: 10px;
 }
 
 div.container {
@@ -70,7 +78,7 @@ div.container {
   height: auto;
   width: 100%;
   font-weight: bold;
-  margin-left: 65px;
+  margin-left: 55px;
 }
 
 .landing-container {
@@ -132,10 +140,26 @@ th, td {
   padding: 8px 12px;
 }
 
+.landing-page {
+  padding: 10px;
+}
+
 .addSongButton {
   position: absolute;
   margin-left: 20px;
   margin-top: 27px;
+}
+
+span {
+  display: block;
+}
+
+#vote-table {
+  margin-left: 50px;
+}
+
+#playlist {
+  text-align: center;
 }
 
 #songSearch:focus,
@@ -157,10 +181,10 @@ th, td {
 
 #searchResults {
   height: auto;
-  width: 31%;
-  border-right: solid 2px;
+  width: 25%;
+  /*border-right: solid 2px;*/
   border-color: black;
-  margin-left: 65px;
+  margin-left: 55px;
   text-align: left;
   overflow: hidden;
 }

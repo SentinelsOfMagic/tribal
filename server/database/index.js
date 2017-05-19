@@ -56,7 +56,7 @@ const insertPlaylist = (playlistId, accountId) => {
 };
 
 // DELETE LATER - just dummy data that April is using
-// insertPlaylist('6A66KGoajMxC6eE7IgJrE7', '1233151550');
+insertPlaylist('6A66KGoajMxC6eE7IgJrE7', '1233151550');
 
 const retrievePlaylist = (playlistHash) => {
   return Playlist.find({_id: playlistHash});
@@ -97,8 +97,8 @@ const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist) => {
   });
 };
 
-// insertSongToPlaylist('591e10e4b9c3885749a69359', '2', 'Twice', 'Catfish and the Bottlemen');
-// insertSongToPlaylist('591e10e4b9c3885749a69359', '3', 'Outcast at Last', 'Sticky Fingers');
+// insertSongToPlaylist('591e56f6835cbb2a56f09852', '2', 'Twice', 'Catfish and the Bottlemen');
+// insertSongToPlaylist('591e56f6835cbb2a56f09852', '3', 'Outcast at Last', 'Sticky Fingers');
 
 const retrieveAllSongsForPlaylist = (playlistHash) => {
   return Song.find({playlistHash: playlistHash});

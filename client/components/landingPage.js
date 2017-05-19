@@ -5,7 +5,7 @@ angular.module('tribal')
   this.showError = false;
   this.showMain = false;
   this.showInit = true;
-  this.playlistUri = [];
+  this.playlistUri = '';
   this.playlistHash = $location.search().playlist;
   this.existingPlaylist = ($event) => {
     this.showForm = true;

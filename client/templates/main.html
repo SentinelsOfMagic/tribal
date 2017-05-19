@@ -2,7 +2,7 @@
 
 <div class="container">
 
-  <H1 ng-click="ctrl.clickTitle()">TRIBAL</H1>
+  <h1 ng-click="ctrl.clickTitle()">TRIBAL</h1>
 
   <div id="searchBar">
     <search search-results-handler="ctrl.searchResultsHandler" />
@@ -18,8 +18,9 @@
       <playlist playlist-uri="ctrl.playlistUri" />
     </div>
 
-    <div>
-        <voter-table songs="ctrl.songs"/>
+    <div id="vote-table">
+      <h4 id="vote">VOTE HERE</h4>
+      <voter-table songs="ctrl.songs"/>
     </div>
     </div>
   </div>
