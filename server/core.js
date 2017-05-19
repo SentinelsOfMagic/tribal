@@ -87,9 +87,7 @@ app.get('/tracks', (req, res) => {
 app.get('/grabSongsData', (req, res) => {
   db.retrieveAllSongsForPlaylist(req.query.playlist)
     .then((data)=>{
-      console.log('all the songs with playlist hash', data);
       res.send(data);
-      //expect to get a list of the songs for that playlist hash
     })
     .catch(err => {
       console.log('trouble grabbing the data', err);

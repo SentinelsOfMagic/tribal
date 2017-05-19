@@ -1,9 +1,11 @@
 <div>
 <table>
-  <tr ng-repeat="song in ctrl.songsFromPlaylist" song="song">
+  <tr ng-repeat="song in ctrl.songs" song="song">
   <td>
-    Title of Song (need to render song title or id)
     {{song.songTitle}}
+  </td>
+  <td>
+    {{song.songArtist}}
   </td>
   <td>
     <button type="submit" ng-model='upvote' ng-click="ctrl.someEventHandler('upvote')">
