@@ -15,11 +15,12 @@ const tribalServer = function( $http ) {
     });
   };
 
-  this.insertVotes = function(vote) {
-    console.log('where will i see this?', vote);
+  this.insertVotes = function(vote, songId, callback) {
+    socket.emit('voting', vote, songId, callback);
     return $http.get('/inputVotes', {
       params: {
-        vote: vote
+        vote: vote,
+        songId: songId
       }
     });
   };
