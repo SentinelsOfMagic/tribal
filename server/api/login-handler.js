@@ -12,7 +12,7 @@ let clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 let redirectURI = process.env.SPOTIFY_REDIRECT_URI;
 let stateKey = 'spotify_auth_state';
 // AUTHORIZATION PERMISSIONS: Add needed permissions
-let scope = 'user-read-private user-read-email playlist-modify-private';
+let scope = 'user-read-private user-read-email playlist-modify-private playlist-read-private';
 
 /**
  * Generates a random string containing numbers and letters

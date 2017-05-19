@@ -5,6 +5,7 @@ const request = require('request');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const Login = require('./api/login-handler.js');
+const apiCalls = require('./api/api-calls.js');
 
 const app = express();
 const http = require('http').Server(app);
@@ -36,10 +37,43 @@ app.get('/login', Login.login);
 app.get('/callback', Login.callback);
 app.get('/refresh_token', Login.refreshToken);
 
+// Add song to Spotify playlist
+app.get('/addSong', (req, res, err) => {
+  var playlistHash = req.query.playlistHash;
+  var songUri = req.query.songUri;
 
-// app.get('/addSong', (req, res, err) => {
+  // retrieve accountId and playlistId from DB with playlistHash
+  db.retrievePlaylist(playlistHash)
+  .then((playlistData) => {
+    console.log('retrieved playlistData successfully in /addSong:', playlistData);
+    var accountId = playlistData.accountId;
+    var playlistId = playlistData.playlistId;
 
-// });
+    // retrieve accessToken with accountId
+    db.retrieveAccount(accountId)
+    .then((accountData) => {
+      console.log('retrieved accountData successfully in /addSong:', accountData);
+      var accessToken = accountData.accessToken;
+      // var refreshToken = accountData.refreshToken; // not needed right now
+
+      apiCalls.addSongToPlaylist(accessToken, accountId, playlistId, [songUri])
+      .then((data) => {
+        console.log('song added to playlist successfully! ', data);
+      })
+      .catch((err) => {
+        console.log('error occurred while adding song to playlist:', err);
+      });
+    })
+    .catch((err) => {
+      console.log('error occurred while retrieving accountData in /addSong:', err);
+      res.sendStatus(404);
+    });
+  })
+  .catch((err) => {
+    console.log('Unable to retrieve playlist data in /addSong: ', err);
+    res.sendStatus(404);
+  });
+});
 
 // test endpoint for reporting status of database connection
 app.get('/test', (req, res) => {
@@ -116,7 +150,7 @@ app.get('/playlist', (req, res) => {
   db.retrievePlaylist(req.query.playlist)
     .then(data => {
       console.log('Playlist data successfully retrieved: ', data);
-      var playlistUri = `spotify:user:${data[0].accountId}:playlist:${data[0].playlistId}`;
+      var playlistUri = `spotify:user:${data.accountId}:playlist:${data.playlistId}`;
       res.send(playlistUri);
     })
     .catch(err => {

@@ -28,6 +28,10 @@ const insertAccount = (accountId, accessToken, refreshToken) => {
   // });
 };
 
+const retrieveAccount = (accountId) => {
+  return Account.findOne({accountId: accountId});
+};
+
 
 // Playlists
 const PlaylistSchema = mongoose.Schema({
@@ -59,7 +63,7 @@ const insertPlaylist = (playlistId, accountId) => {
 insertPlaylist('6A66KGoajMxC6eE7IgJrE7', '1233151550');
 
 const retrievePlaylist = (playlistHash) => {
-  return Playlist.find({_id: playlistHash});
+  return Playlist.findById(playlistHash);
 };
 
 // Songs
@@ -192,6 +196,7 @@ const createPlaylist = function( name ) {
 
 module.exports.mongoose = mongoose;
 module.exports.insertAccount = insertAccount;
+module.exports.retrieveAccount = retrieveAccount;
 module.exports.insertPlaylist = insertPlaylist;
 module.exports.retrievePlaylist = retrievePlaylist;
 module.exports.insertSongToPlaylist = insertSongToPlaylist;

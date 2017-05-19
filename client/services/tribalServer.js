@@ -6,6 +6,15 @@ const tribalServer = function( $http ) {
     return $http.get( '/test' );
   };
 
+  this.addSong = (playlistHash, songUri) => {
+    return $http.get('/addSong', {
+      params: {
+        playlistHash: playlistHash,
+        songUri: songUri
+      }
+    });
+  };
+
   this.insertVotes = function(vote) {
     console.log('where will i see this?', vote);
     return $http.get('/inputVotes', {
@@ -28,10 +37,10 @@ const tribalServer = function( $http ) {
     socket.emit( 'playlist', playlistId, callback );
   };
 
-  // request that the server add a song to the playlist
-  this.addSong = function( uri ) {
-    socket.emit( 'add song', uri );
-  };
+  // // request that the server add a song to the playlist
+  // this.addSong = function( uri ) {
+  //   socket.emit( 'add song', uri );
+  // };
 
   this.registerSongAddedHandler = function( callback ) {
     socket.on( 'song added', callback );
