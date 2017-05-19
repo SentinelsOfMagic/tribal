@@ -43,7 +43,7 @@ const tribalServer = function( $http ) {
   //   socket.emit( 'add song', uri );
   // };
 
-  this.registerSongAddedHandler = function( callback ) {
+  this.registerSongAddedHandler = function(callback) {
     socket.on( 'song added', callback );
   };
 
@@ -56,12 +56,21 @@ const tribalServer = function( $http ) {
   };
 
   this.checkPlaylistHash = function(hash) {
-    console.log('tribal server: ', hash);
     return $http.get('/playlist', {
       params: {
         playlist: hash
       }
     });
+  };
+
+  this.playSong = function() {
+    console.log('tribalServer playSong');
+    return $http.post('/play');
+  };
+
+  this.pauseSong = function() {
+    console.log('tribalServer pauseSong');
+    return $http.post('/pause');
   };
 };
 
