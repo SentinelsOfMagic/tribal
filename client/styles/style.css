@@ -136,7 +136,8 @@ th, td {
 #searchButton,
 .landing-button,
 .enter-button,
-.vote-button {
+.vote-button,
+.playlist-button {
   border: none;
   background-color: black;
   border-radius: 15px;
@@ -144,6 +145,12 @@ th, td {
   color: white;
   cursor: pointer;
   padding: 8px 12px;
+}
+
+.playlist-button {
+  margin: 10px;
+  width: 100px;
+  font-size: 20px;
 }
 
 .landing-page {
@@ -173,7 +180,8 @@ span {
 .addSongButton:focus,
 .landing-button:focus,
 .enter-button:focus,
-.vote-button:focus {
+.vote-button:focus,
+.playlist-button:focus {
   outline: none;
 }
 
@@ -181,7 +189,8 @@ span {
 .addSongButton:active,
 .landing-button:active,
 .enter-button:active,
-.vote-button:active {
+.vote-button:active,
+.playlist-button:active {
   background-color: #1ED760;
 }
 
@@ -200,6 +209,7 @@ span {
 }
 
 #hash-input {
+  text-align: center;
   height: 30px;
   width: 300px;
   border: none;
@@ -207,5 +217,13 @@ span {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
+}
+
+.playing {
+  font-size: 25px;
+}
+
+img {
+  margin: 10px;
 }
 
