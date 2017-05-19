@@ -129,7 +129,7 @@ app.get('/grabSongsData', (req, res) => {
 });
 
 app.get('/inputVotes', (req, res) => {
-  // console.log('expect voteUpDown', req.query.vote);
+  console.log('expect songId', req.query.songId);
   if (req.query.vote === 'upvote') {
     //do i need to query the database for the current upvote number
     //for that song, save it to a variable, add one to the variable,
@@ -159,6 +159,11 @@ app.get('/playlist', (req, res) => {
 
 // socket.io framework
 io.on( 'connection', function(client) {
+
+  client.on('voting', function(vote, callback) {
+    //look in the database for song and then the upvotes/downvotes for that song
+    callback({ checking: 'just checking' });
+  });
 
   client.on('add song', (uri) => {
     console.log( 'Client adding song', uri );

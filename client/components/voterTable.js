@@ -1,7 +1,10 @@
 angular.module('tribal')
 .controller('voterTableController', function(tribalServer) {
-  this.someEventHandler = (vote) => {
-    tribalServer.insertVotes(vote);
+  this.votingHandler = (vote, songId) => {
+    console.log('songId', songId);
+    tribalServer.insertVotes(vote, songId, (res) => {
+      console.log('expect just checking', res.checking);
+    });
   };
 })
 
