@@ -16,8 +16,7 @@ const tribalServer = function( $http ) {
   };
 
   this.insertVotes = function(vote, songId, callback) {
-    // socket.emit('voting', vote, songId, callback);
-    console.log('where will i see this?', vote, 'songId', songId);
+    socket.emit('voting', vote, songId, callback);
     return $http.get('/inputVotes', {
       params: {
         vote: vote,

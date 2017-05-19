@@ -1,9 +1,12 @@
 angular.module('tribal')
 .controller('voterTableController', function(tribalServer) {
   this.votingHandler = (vote, songId) => {
-    console.log('songId', songId);
     tribalServer.insertVotes(vote, songId, (res) => {
-      console.log('expect just checking', res.checking);
+      console.log('upvotes', res.upvotes);
+      console.log('downvotes', res.downvotes);
+      this.upvotes = res.upvotes;
+      this.downvotes = res.downvotes;
+
     });
   };
 })

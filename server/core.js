@@ -160,9 +160,10 @@ app.get('/playlist', (req, res) => {
 // socket.io framework
 io.on( 'connection', function(client) {
 
-  client.on('voting', function(vote, callback) {
+  client.on('voting', function(vote, songId, callback) {
+    console.log('expect vote and songId', vote, songId);
     //look in the database for song and then the upvotes/downvotes for that song
-    callback({ checking: 'just checking' });
+    callback({ upvotes: '1', downvotes: '1' });
   });
 
   client.on('add song', (uri) => {
