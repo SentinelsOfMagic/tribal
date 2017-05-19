@@ -1,12 +1,12 @@
 <div>
-  <div ng-if="ctrl.showInit" class="landing-container">
-    <H1>TRIBAL</H1>
+  <div ng-if="ctrl.showInit" class="landing-container landing-page">
+    <h1>TRIBAL</h1>
     <button class="landing-button" type="button"><a href="/login">Create new playlist</a></button>
     <button class="landing-button" type="button" ng-click="ctrl.existingPlaylist()">Enter existing playlist</button>
-    <div ng-if="ctrl.showForm">
+    <div ng-if="ctrl.showForm" class="landing-page">
       <input id="hash-input" type="text" ng-model="hash"></input>
-      <div ng-if="ctrl.showError">Playlist ID not found, please enter a valid ID</div>
-      <div>
+      <div ng-if="ctrl.showError" class="landing-page">Playlist ID not found, please enter a valid ID</div>
+      <div class="landing-page">
         <button class="enter-button" type="button" ng-click="ctrl.submitPlaylist(hash)">Enter</button>
         <button class="enter-button" type="button" ng-click="ctrl.clickCancel()">Cancel</button>
       </div>

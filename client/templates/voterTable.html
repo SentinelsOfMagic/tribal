@@ -1,19 +1,17 @@
 <div>
 <table>
   <tr ng-repeat="song in ctrl.songs" song="song">
-  <td>
-    {{song.songTitle}}
+  <td width="200">
+    <span>{{song.songTitle}}</span>
+    <span>{{song.songArtist}}</span>
   </td>
   <td>
-    {{song.songArtist}}
-  </td>
-  <td>
-    <button type="submit" ng-model='upvote' ng-click="ctrl.someEventHandler('upvote')">
+    <button class="vote-button" type="submit" ng-model='upvote' ng-click="ctrl.someEventHandler('upvote')">
       👍
     </button>
   </td>
   <td>
-    <button type="submit" ng-model='downvote' ng-click="ctrl.someEventHandler('downvote')" >
+    <button class="vote-button" type="submit" ng-model='downvote' ng-click="ctrl.someEventHandler('downvote')" >
       👎
     </button>
   </td>
