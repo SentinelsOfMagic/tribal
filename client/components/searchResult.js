@@ -1,7 +1,8 @@
-const SearchResultController = function( tribalServer ) {
+const SearchResultController = function($location, tribalServer) {
 
   this.addSongButtonHandler = () => {
     // tribalServer.addSong( this.searchResult );
+    this.playlistHash = $location.search().playlist;
     console.log(this.searchResult);
     console.log('playlistHash:', this.playlistHash);
 
@@ -21,11 +22,10 @@ const SearchResultController = function( tribalServer ) {
 const SearchResult = function() {
   return {
     scope: {
-      searchResult: '<',
-      playlistHash: '<'
+      searchResult: '<'
     },
     restrict: 'E',
-    controller: [ 'tribalServer', SearchResultController ],
+    controller: [ '$location', 'tribalServer', SearchResultController ],
     controllerAs: 'ctrl',
     bindToController: true,
     templateUrl: '/templates/searchResult.html'

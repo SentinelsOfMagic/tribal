@@ -1,8 +1,7 @@
 const SearchResults = function() {
   return {
     scope: {
-      searchResults: '<',
-      playlistHash: '<'
+      searchResults: '<'
     },
     restrict: 'E',
     controller: () => {},
