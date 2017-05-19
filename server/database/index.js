@@ -80,7 +80,7 @@ const SongSchema = mongoose.Schema({
 
 const Song = mongoose.model('Song', SongSchema);
 
-const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist) => {
+const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist, index) => {
   var newSong = new Song({
     playlistHash: playlistHash,
     songId: songId,
@@ -89,7 +89,7 @@ const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist) => {
     upvotes: 0,
     downvotes: 0,
     net: 0,
-    index: null
+    index: index
   });
 
   return newSong.save()
@@ -101,8 +101,16 @@ const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist) => {
   });
 };
 
-// insertSongToPlaylist('591e56f6835cbb2a56f09852', '2', 'Twice', 'Catfish and the Bottlemen');
-// insertSongToPlaylist('591e56f6835cbb2a56f09852', '3', 'Outcast at Last', 'Sticky Fingers');
+// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Over You', 'SAFIA', 1);
+// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Twice', 'Catfish and the Bottlemen', 2);
+// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Outcast at Last', 'Sticky Fingers', 3);
+// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Dang! (feat. Anderson .Paak)', 'Mac Miller, Anderson .Paak', 4);
+// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Step up the Morphine', 'DMA\'S', 5);
+// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Sad Songs', 'Sticky Fingers', 6);
+// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Bullshit', 'Dune Rats', 7);
+// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Notion', 'Tash Sultana', 8);
+// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Our Town', 'Sticky Fingers', 9);
+// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Make Them Wheels Roll', 'SAFIA', 10);
 
 const retrieveAllSongsForPlaylist = (playlistHash) => {
   return Song.find({playlistHash: playlistHash});
