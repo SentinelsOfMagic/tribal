@@ -158,6 +158,20 @@ app.get('/playlist', (req, res) => {
     });
 });
 
+app.post('/play', (req, res) => {
+  console.log('PLAY server side');
+  // call Spotify API
+  // https://api.spotify.com/v1/me/player/play
+  res.sendStatus(201);
+});
+
+app.post('/pause', (req, res) => {
+  console.log('PAUSE server side');
+  // call Spotify API
+  // https://developer.spotify.com/web-api/console/put-pause/
+  res.sendStatus(201);
+});
+
 // socket.io framework
 io.on( 'connection', function(client) {
 
