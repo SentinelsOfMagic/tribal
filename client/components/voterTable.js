@@ -1,7 +1,5 @@
 angular.module('tribal')
 .controller('voterTableController', function(tribalServer) {
-  console.log('this object', this);
-  this.songsFromPlaylist = [{}, {}, {}];
   this.someEventHandler = (vote) => {
     tribalServer.insertVotes(vote);
   };

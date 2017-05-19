@@ -18,12 +18,17 @@ angular.module('tribal')
     console.log('submit playlist input: ', hash);
     tribalServer.checkPlaylistHash(hash)
       .then(res => {
-        console.log('uri: ', res.data);
         this.playlistUri = res.data;
         this.showMain = true;
         this.showInit = false;
         $location.search('playlist', hash);
-        console.log('submit location: ', $location);
+        tribalServer.grabSongsFromPlaylist(hash)
+          .then(res => {
+            this.songsFromPlaylist = res.data.sort((a, b) => a.index - b.index);
+          })
+          .catch(err => {
+            console.log('trouble getting the songs in frontend', err);
+          });
       })
       .catch(err => {
         console.log('error: ', err);
@@ -40,16 +45,15 @@ angular.module('tribal')
   };
   if (this.playlistHash) {
     this.submitPlaylist(this.playlistHash);
+    tribalServer.grabSongsFromPlaylist(this.playlistHash)
+      .then(res => {
+        this.songsFromPlaylist = res.data.sort((a, b) => a.index - b.index);
+      })
+      .catch(err => {
+        console.log('trouble getting the songs in frontend', err);
+      });
   }
 
-  tribalServer.grabSongsFromPlaylist(this.playlistHash)
-    .then(res => {
-      console.log('array of songs', res.data);
-      this.songsFromPlaylist = res.data;
-    })
-    .catch(err => {
-      console.log('trouble getting the songs in frontend', err);
-    });
 
 })
 

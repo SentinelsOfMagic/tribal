@@ -59,6 +59,7 @@ a {
 }
 
 #vote {
+  width: 300px;
   text-align: center;
   font-family: 'Barrio', cursive;
   font-size: 30px;
@@ -160,7 +161,7 @@ span {
 }
 
 #vote-table {
-  margin-left: 50px;
+  margin-left: 40px;
 }
 
 #playlist {
