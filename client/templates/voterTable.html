@@ -3,7 +3,7 @@
   <tr ng-repeat="song in ctrl.songs" song="song">
   <td width="200">
     <span>{{song.songTitle}}</span>
-    <span>{{song.songArtist}}</span>
+    <span class="song-artist">{{song.songArtist}}</span>
   </td>
   <td>
     <button class="vote-button" type="submit" ng-model='upvote' ng-click="ctrl.someEventHandler('upvote')">

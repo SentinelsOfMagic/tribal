@@ -44,6 +44,11 @@ a {
   text-decoration: none;
 }
 
+.song-artist {
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
 #tribeList {
   text-align: center;
   width: 600px;
