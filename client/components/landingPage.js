@@ -5,11 +5,12 @@ angular.module('tribal')
   this.showError = false;
   this.showMain = false;
   this.showInit = true;
-  this.playlistUri = '';
+  this.playlistUri = [];
   this.playlistHash = $location.search().playlist;
   this.existingPlaylist = ($event) => {
     this.showForm = true;
   };
+  this.songsFromPlaylist = [];
   this.clickCancel = ($event) => {
     this.showForm = false;
   };
@@ -39,6 +40,16 @@ angular.module('tribal')
   if (this.playlistHash) {
     this.submitPlaylist(this.playlistHash);
   }
+
+  tribalServer.grabSongsFromPlaylist(this.playlistHash)
+    .then(res => {
+      console.log('array of songs', res.data);
+      this.songsFromPlaylist = res.data;
+    })
+    .catch(err => {
+      console.log('trouble getting the songs in frontend', err);
+    });
+
 })
 
 .directive('landingPage', function() {

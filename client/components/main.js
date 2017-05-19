@@ -16,7 +16,7 @@ angular.module('tribal')
     scope: {
       playlistUri: '<',
       clickTitle: '<',
-      playlistHash: '<'
+      songs: '<'
     },
     restrict: 'E',
     controller: 'MainController',
