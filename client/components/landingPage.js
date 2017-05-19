@@ -45,7 +45,7 @@ angular.module('tribal')
   tribalServer.grabSongsFromPlaylist(this.playlistHash)
     .then(res => {
       console.log('array of songs', res.data);
-      this.songsFromPlaylist = res.data;
+      this.songsFromPlaylist = res.data.sort((a, b) => a.index - b.index);
     })
     .catch(err => {
       console.log('trouble getting the songs in frontend', err);
