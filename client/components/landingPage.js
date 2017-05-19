@@ -32,6 +32,7 @@ angular.module('tribal')
   this.clickTitle = ($event) => {
     this.showMain = false;
     this.showInit = true;
+    this.showForm = false;
     delete $location.search().playlist;
     $location.url('');
     $location.absUrl(process.env.HOST);
