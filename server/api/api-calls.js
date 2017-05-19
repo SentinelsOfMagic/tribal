@@ -7,4 +7,11 @@ let createPlaylist = (accessToken, account, playlistName) => {
   });
 };
 
+let addSongToPlaylist = (accessToken, accountId, playlistId, songUri) => {
+
+  Spotify.setAccessToken(accessToken);
+  return Spotify.addTracksToPlaylist(accountId, playlistId, songUri);
+};
+
 module.exports.createPlaylist = createPlaylist;
+module.exports.addSongToPlaylist = addSongToPlaylist;

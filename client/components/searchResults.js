@@ -2,6 +2,7 @@ const SearchResults = function() {
   return {
     scope: {
       searchResults: '<',
+      playlistHash: '<'
     },
     restrict: 'E',
     controller: () => {},
