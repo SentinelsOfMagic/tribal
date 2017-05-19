@@ -59,6 +59,7 @@ a {
 }
 
 #vote {
+  width: 300px;
   text-align: center;
   font-family: 'Barrio', cursive;
   font-size: 30px;
