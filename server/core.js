@@ -59,6 +59,7 @@ app.get('/addSong', (req, res, err) => {
       apiCalls.addSongToPlaylist(accessToken, accountId, playlistId, [songUri])
       .then((data) => {
         console.log('song added to playlist successfully! ', data);
+        res.send('success');
       })
       .catch((err) => {
         console.log('error occurred while adding song to playlist:', err);
