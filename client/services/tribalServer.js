@@ -68,14 +68,24 @@ const tribalServer = function( $http ) {
 
   this.playSong = function(playlistHash) {
     console.log('tribalServer playSong');
-    return $http.post('/play', {playlist: playlistHash}
-    );
+    socket.emit('play');
+    return $http.post('/play', { playlist: playlistHash });
   };
 
   this.pauseSong = function(playlistHash) {
     console.log('tribalServer pauseSong');
-    return $http.post('/pause', {playlist: playlistHash}
-    );
+    socket.emit('pause');
+    return $http.post('/pause', { playlist: playlistHash });
+  };
+
+  this.registerPlay = function(callback) {
+    console.log('registerPlay: ', callback);
+    socket.on('playing', callback);
+  };
+
+  this.registerPause = function(callback) {
+    console.log('registerPause: ', callback);
+    socket.on('paused', callback);
   };
 };
 
