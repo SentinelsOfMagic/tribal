@@ -6,13 +6,13 @@
       <span class="song-artist">{{song.songArtist}}</span>
     </td>
     <td>
-      <button class="vote-button" song="song" type="submit" ng-model='upvote' upvotes="ctrl.upvotes" ng-click="ctrl.votingHandler('upvote', song.songId)">
-        {{ctrl.upvotes}} 👍
+      <button class="vote-button" song="song" type="submit" ng-model='upvote' upvotes="ctrl.upvotes" ng-click="ctrl.votingHandler('upvote', song._id)">
+        {{song.upvotes}} 👍
       </button>
     </td>
     <td>
-      <button class="vote-button" downvotes="ctrl.downvotes" id="song.songId" type="submit" ng-model='downvote' ng-click="ctrl.votingHandler('downvote', song.songId)" >
-        {{ctrl.downvotes}} 👎
+      <button class="vote-button" downvotes="ctrl.downvotes" id="song.songId" type="submit" ng-model='downvote' ng-click="ctrl.votingHandler('downvote', song._id)" >
+        {{song.downvotes}} 👎
       </button>
     </td>
 </tr>

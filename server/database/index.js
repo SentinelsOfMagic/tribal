@@ -126,15 +126,25 @@ const retrieveAllSongsForPlaylist = (playlistHash) => {
   return Song.find({playlistHash: playlistHash});
 };
 
+const retrieveSongForPlaylist = (_id, playlistHash) => {
+  return Song.find({playlistHash: playlistHash, _id: _id})
+  .catch((err)=> {
+    console.log('error in retrieving song', err);
+  });
+};
+
+
 const inputSongUpvote = (playlistHash, songId) => {
-  return Song.findOneAndUpdate({playlistHash: playlistHash, songId: songId}, {$inc: {upvotes: 1}})
+  return Song.findOneAndUpdate({playlistHash: playlistHash, _id: songId}, {$inc: {upvotes: 1}})
   .catch((err) => {
     console.log('error occurred while saving upvoted song:', err);
   });
 };
 
+
+
 const inputSongDownvote = (playlistHash, songId) => {
-  return Song.findOneAndUpdate({playlistHash: playlistHash, songId: songId}, {$inc: {downvotes: 1}})
+  return Song.findOneAndUpdate({playlistHash: playlistHash, _id: songId}, {$inc: {downvotes: 1}})
   .catch((err) => {
     console.log('error occurred while finding song to downvote:', err);
   });
@@ -199,6 +209,7 @@ module.exports.insertSongToPlaylist = insertSongToPlaylist;
 module.exports.retrieveAllSongsForPlaylist = retrieveAllSongsForPlaylist;
 module.exports.inputSongUpvote = inputSongUpvote;
 module.exports.inputSongDownvote = inputSongDownvote;
+module.exports.retrieveSongForPlaylist = retrieveSongForPlaylist;
 
 
 // old exports

@@ -23,7 +23,7 @@ const tribalServer = function( $http ) {
       params: {
         vote: vote,
         songId: songId,
-        hash: hash,
+        hash: hash
       }
     });
   };

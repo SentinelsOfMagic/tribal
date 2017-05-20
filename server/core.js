@@ -4,7 +4,6 @@ const Promise = require('bluebird');
 const request = require('request');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const Login = require('./api/login-handler.js');
 const apiCalls = require('./api/api-calls.js');
 
@@ -19,7 +18,6 @@ const DATABASE_CONNECTED_MESSAGE = 'Connected';
 const DATABASE_NOT_CONNECTED_MESSAGE = 'NOT connected';
 
 app.use(cookieParser());
-app.use(bodyParser.json());
 
 app.use((req, res, next) => {
   if (process.env.DEPLOY_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
@@ -160,9 +158,21 @@ app.get('/inputVotes', (req, res) => {
   console.log('expect hash and songId', req.query.hash, req.query.songId);
 
   if (req.query.vote === 'upvote') {
-    db.inputSongUpvote(req.query.hash, req.query.songId);
+    db.inputSongUpvote(req.query.hash, req.query.songId)
+      .then((data) => {
+        console.log('successfully input upvote');
+      })
+      .catch(err=> {
+        console.log('fail input upvote', err);
+      });
   } else {
-    db.inputSongDownvote(req.query.hash, req.query.songId);
+    db.inputSongDownvote(req.query.hash, req.query.songId)
+      .then((data) => {
+        console.log('successfully input downvote');
+      })
+      .catch(err=> {
+        console.log('fail input downvote', err);
+      });
   }
   res.send('done voting');
 });
@@ -182,7 +192,9 @@ app.get('/playlist', (req, res) => {
 });
 
 app.post('/play', (req, res) => {
-  // console.log('PLAY server side');
+
+  console.log('PLAY server side');
+  // call Spotify API
   var playlistHash = req.body.playlist;
 
   // retrieve accountId and playlistId from DB with playlistHash
@@ -215,7 +227,8 @@ app.post('/play', (req, res) => {
       };
 
       request(options, (err, resp, body) => {
-        console.log('api call /play successful:', body);
+        console.log('api call /play successful', body);
+
         res.sendStatus(201);
       });
 
@@ -275,7 +288,8 @@ app.post('/resume', (req, res) => {
 });
 
 app.post('/pause', (req, res) => {
-  // console.log('PAUSE server side');
+  console.log('PAUSE server side');
+  // call Spotify API
   var playlistHash = req.body.playlist;
 
   // retrieve accountId and playlistId from DB with playlistHash
@@ -355,11 +369,20 @@ io.on( 'connection', function(client) {
     }
   });
 
-  client.on('voting', function(vote, songId, callback) {
+  client.on('voting', function(vote, songId, hash, callback) {
     console.log('expect vote and songId', vote, songId);
     //look in the database for song and then the upvotes/downvotes for that song
-    db.retrieveAllSongsForPlaylist(hash);
-    callback({ upvotes: '1', downvotes: '1' });
+
+    db.retrieveSongForPlaylist(songId, hash, callback)
+      .then((data)=>{
+        console.log('expect one song object', data);
+        callback({ upvotes: data[0].upvotes, downvotes: data[0].downvotes });
+      })
+      .catch((error)=>{
+        console.log('error in retrieving song', error);
+      });
+
+    // console.log('upvotes', song.upvotes, 'downvotes', song.downvotes )
   });
 
   client.on('add song', (uri) => {
