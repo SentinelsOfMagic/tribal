@@ -151,17 +151,11 @@ app.get('/grabSongsData', (req, res) => {
 });
 
 app.get('/inputVotes', (req, res) => {
-  console.log('expect songId', req.query.songId);
+  console.log('expect hash and songId', req.query.hash, req.query.songId);
   if (req.query.vote === 'upvote') {
-    //do i need to query the database for the current upvote number
-    //for that song, save it to a variable, add one to the variable,
-    //and then insert that number into the database?
-    console.log('its an upvote', req.query.vote);
-    //input upvote for song
-    //need access to songid/song title to know where to insert
+    db.inputSongUpvote(req.query.hash, req.query.songId);
   } else {
-    console.log('its a downvote', req.query.vote);
-    //input downvote
+    db.inputSongDownvote(req.query.hash, req.query.songId);
   }
 });
 
@@ -196,9 +190,10 @@ app.post('/pause', (req, res) => {
 // socket.io framework
 io.on( 'connection', function(client) {
 
-  client.on('voting', function(vote, songId, callback) {
-    console.log('expect vote and songId', vote, songId);
+  client.on('voting', function(vote, songId, hash, callback) {
+    console.log('expect vote and songId and hash', vote, songId, hash);
     //look in the database for song and then the upvotes/downvotes for that song
+    db.retrieveAllSongsForPlaylist(hash)
     callback({ upvotes: '1', downvotes: '1' });
   });
 

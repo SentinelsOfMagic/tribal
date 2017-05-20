@@ -1,20 +1,21 @@
 angular.module('tribal')
 .controller('voterTableController', function(tribalServer) {
-  this.votingHandler = (vote, songId) => {
-    tribalServer.insertVotes(vote, songId, (res) => {
-      console.log('upvotes', res.upvotes);
-      console.log('downvotes', res.downvotes);
-      this.upvotes = res.upvotes;
-      this.downvotes = res.downvotes;
+  // this.votingHandler = (vote, songId) => {
+  //   tribalServer.insertVotes(vote, songId, (res) => {
+  //     console.log('upvotes', res.upvotes);
+  //     console.log('downvotes', res.downvotes);
+  //     this.upvotes = res.upvotes;
+  //     this.downvotes = res.downvotes;
 
-    });
-  };
+  //   });
+  // };
 })
 
 .directive('voterTable', function() {
   return {
     scope: {
-      songs: '<'
+      songs: '<',
+      votingHandler: '<'
     },
     restrict: 'E',
     controller: 'voterTableController',
