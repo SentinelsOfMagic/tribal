@@ -54,6 +54,17 @@ angular.module('tribal')
       });
   }
 
+  this.votingHandler = (vote, songId) => {
+    tribalServer.insertVotes(vote, songId, this.playlistHash, (res) => {
+      console.log('hash', this.playlistHash);
+      console.log('upvotes', res.upvotes);
+      console.log('downvotes', res.downvotes);
+      this.upvotes = res.upvotes;
+      this.downvotes = res.downvotes;
+
+    });
+  };
+
 
 })
 
