@@ -56,6 +56,8 @@ app.get('/addSong', (req, res, err) => {
     console.log('retrieved playlistData successfully in /addSong:', playlistData);
     var accountId = playlistData.accountId;
     var playlistId = playlistData.playlistId;
+    var position = playlistData.orderedSongs.length;
+    console.log('POSITION:', position);
 
     // retrieve accessToken with accountId
     db.retrieveAccount(accountId)
@@ -213,7 +215,50 @@ app.post('/play', (req, res) => {
       };
 
       request(options, (err, resp, body) => {
-        console.log('api call /play successful');
+        console.log('api call /play successful:', body);
+        res.sendStatus(201);
+      });
+
+    })
+    .catch((err) => {
+      console.log('error occurred while retrieving accountData in /play:', err);
+      res.sendStatus(404);
+    });
+  })
+  .catch((err) => {
+    console.log('Unable to retrieve playlist data in /play: ', err);
+    res.sendStatus(404);
+  });
+});
+
+app.post('/resume', (req, res) => {
+  // console.log('PLAY server side');
+  var playlistHash = req.body.playlist;
+
+  // retrieve accountId and playlistId from DB with playlistHash
+  db.retrievePlaylist(playlistHash)
+  .then((playlistData) => {
+    // console.log('retrieved playlistData successfully in /play:', playlistData);
+    var accountId = playlistData.accountId;
+    var playlistId = playlistData.playlistId;
+
+    // retrieve accessToken with accountId
+    db.retrieveAccount(accountId)
+    .then((accountData) => {
+      var accessToken = accountData.accessToken;
+      // var refreshToken = accountData.refreshToken; // not needed right now
+
+      // call Spotify API
+      var options = {
+        url: 'https://api.spotify.com/v1/me/player/play',
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + accessToken
+        }
+      };
+
+      request(options, (err, resp, body) => {
+        console.log('api call /play successful:', body);
         res.sendStatus(201);
       });
 

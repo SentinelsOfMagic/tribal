@@ -77,6 +77,8 @@ const insertSongToPlaylistOrderedSongs = (playlistHash, songId) => {
 };
 
 // Songs
+
+// TODO: add image url
 const SongSchema = mongoose.Schema({
   songId: String,
   songTitle: String,
