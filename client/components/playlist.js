@@ -1,6 +1,8 @@
 angular.module('tribal')
 
-.controller('PlaylistController', function(tribalServer) {
+.controller('PlaylistController', function($location, tribalServer) {
+  this.playlistHash = $location.search().playlist;
+
   this.playing = false;
   // this.currentSong = false;
   this.currentSong = {
@@ -18,13 +20,15 @@ angular.module('tribal')
       }]
     }
   };
+
   this.clickPlay = ($event) => {
     this.playing = true;
-    tribalServer.playSong();
+    tribalServer.playSong(this.playlistHash);
   };
+
   this.clickPause = ($event) => {
     this.playing = false;
-    tribalServer.pauseSong();
+    tribalServer.pauseSong(this.playlistHash);
   };
 })
 
