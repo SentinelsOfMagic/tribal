@@ -124,15 +124,18 @@ const retrieveAllSongsForPlaylist = (playlistHash) => {
   return Song.find({playlistHash: playlistHash});
 };
 
+
 const inputSongUpvote = (playlistHash, songId) => {
-  return Song.findOneAndUpdate({playlistHash: playlistHash, songId: songId}, {$inc: {upvotes: 1}})
+  return Song.findOneAndUpdate({playlistHash: playlistHash, _id: songId}, {$inc: {upvotes: 1}})
   .catch((err) => {
     console.log('error occurred while saving upvoted song:', err);
   });
 };
 
+
+
 const inputSongDownvote = (playlistHash, songId) => {
-  return Song.findOneAndUpdate({playlistHash: playlistHash, songId: songId}, {$inc: {downvotes: 1}})
+  return Song.findOneAndUpdate({playlistHash: playlistHash, _id: songId}, {$inc: {downvotes: 1}})
   .catch((err) => {
     console.log('error occurred while finding song to downvote:', err);
   });
