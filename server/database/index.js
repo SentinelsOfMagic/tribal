@@ -126,6 +126,13 @@ const retrieveAllSongsForPlaylist = (playlistHash) => {
   return Song.find({playlistHash: playlistHash});
 };
 
+const retrieveSongForPlaylist = (_id, playlistHash) => {
+  return Song.find({playlistHash: playlistHash, _id: _id})
+  .catch((err)=> {
+    console.log('error in retrieving song', err);
+  });
+};
+
 
 const inputSongUpvote = (playlistHash, songId) => {
   return Song.findOneAndUpdate({playlistHash: playlistHash, _id: songId}, {$inc: {upvotes: 1}})

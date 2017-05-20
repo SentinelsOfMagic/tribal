@@ -334,8 +334,9 @@ io.on( 'connection', function(client) {
   client.on('voting', function(vote, songId, callback) {
     console.log('expect vote and songId', vote, songId);
     //look in the database for song and then the upvotes/downvotes for that song
-    db.retrieveAllSongsForPlaylist(hash);
-    callback({ upvotes: '1', downvotes: '1' });
+    var song = db.retrieveSongForPlaylist(songId, hash);
+    console.log('expect one song object', song);
+    // callback({ upvotes: song.upvotes, downvotes: song.downvotes });
   });
 
   client.on('add song', (uri) => {
