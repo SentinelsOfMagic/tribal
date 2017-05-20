@@ -274,8 +274,44 @@ app.post('/pause', (req, res) => {
 // socket.io framework
 io.on( 'connection', function(client) {
 
-  client.on('voting', function(vote, songId, hash, callback) {
-    console.log('expect vote and songId and hash', vote, songId, hash);
+  client.on('play', () => {
+    console.log('socket play');
+    let playlistId;
+    console.log('play client: ', client);
+    console.log('play client rooms: ', client.rooms);
+    console.log('play client id: ', client.id);
+    for (room in client.rooms) {
+      console.log('play room: ', room);
+      // each socket is also in a room matching its own ID, so let's filter that out
+      // if ( room !== client.id ) {
+      console.log('if statement - play');
+      playlistId = room;
+      console.log('play id: ', playlistId);
+      io.in(playlistId).emit('playing');
+      // }
+    }
+  });
+
+  client.on('pause', () => {
+    console.log('socket pause');
+    let playlistId;
+    console.log('pause client: ', client);
+    console.log('pause client rooms: ', client.rooms);
+    console.log('pause client id: ', client.id);
+    for (room in client.rooms) {
+      console.log('pause room: ', room);
+      // each socket is also in a room matching its own ID, so let's filter that out
+      // if ( room !== client.id ) {
+      console.log('if statement - pause');
+      playlistId = room;
+      console.log('pause id: ', playlistId);
+      io.in(playlistId).emit('paused');
+      // }
+    }
+  });
+
+  client.on('voting', function(vote, songId, callback) {
+    console.log('expect vote and songId', vote, songId);
     //look in the database for song and then the upvotes/downvotes for that song
     db.retrieveAllSongsForPlaylist(hash);
     callback({ upvotes: '1', downvotes: '1' });
