@@ -66,10 +66,16 @@ const tribalServer = function( $http ) {
     });
   };
 
-  this.playSong = function(playlistHash) {
+  this.startParty = function(playlistHash) {
     console.log('tribalServer playSong');
     socket.emit('play');
     return $http.post('/play', { playlist: playlistHash });
+  };
+
+  this.playSong = function(playlistHash) {
+    console.log('tribalServer playSong');
+    socket.emit('resume');
+    return $http.post('/resume', { playlist: playlistHash });
   };
 
   this.pauseSong = function(playlistHash) {
