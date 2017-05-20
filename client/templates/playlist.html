@@ -2,7 +2,7 @@
   CURRENTLY PLAYING
 </h4>
 <div ng-if="ctrl.currentSong">
-  <img src="{{ctrl.currentSong.item.album.images[1].url}}"></img>
+  <img src={{ctrl.currentSong.item.album.images[1].url}}></img>
   <span class="song-title playing">{{ctrl.currentSong.item.name}}</span>
   <span class="song-artist playing">{{ctrl.currentSong.item.artists[0].name}}</span>
   <button class="playlist-button" ng-if="!ctrl.playing" ng-click="ctrl.clickPlay()">Play</button>
