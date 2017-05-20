@@ -200,12 +200,12 @@ const updateSongOrderAfterVote = (songEntry, direction) => {
       Playlist.findOneAndUpdate({_id: movedSong.playlistHash}, {orderedSongs: orderedSongs})
     ]);
   })
-  .then(([oldIndex, updatedSongEntry, oldPlaylistEntry]) => {
+  .then(([newIndex, updatedSongEntry, oldPlaylistEntry]) => {
     console.log('PLAYLIST: ', oldPlaylistEntry);
-    return Promise.all([oldIndex, updatedSongEntry, retrieveAccount(oldPlaylistEntry.accountId), oldPlaylistEntry.playlistId]);
+    return Promise.all([newIndex, updatedSongEntry, retrieveAccount(oldPlaylistEntry.accountId), oldPlaylistEntry.playlistId]);
   })
-  .then(([oldIndex, updatedSongEntry, accountEntry, playlistId]) => {
-    return Spotify.reorderPlaylist(accountEntry.accessToken, accountEntry.accountId, playlistId, oldIndex, updatedSongEntry.index);
+  .then(([newIndex, updatedSongEntry, accountEntry, playlistId]) => {
+    return Spotify.reorderPlaylist(accountEntry.accessToken, accountEntry.accountId, playlistId, updatedSongEntry.index, newIndex);
   })
   .catch((err) => {
     console.log(err);
