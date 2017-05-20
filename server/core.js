@@ -443,17 +443,34 @@ io.on( 'connection', function(client) {
   });
 
   client.on('voting', function(vote, songId, hash, callback) {
-    console.log('expect vote and songId', vote, songId);
     //look in the database for song and then the upvotes/downvotes for that song
+    var upvotes;
+    var downvotes;
 
     db.retrieveSongForPlaylist(songId, hash, callback)
       .then((data)=>{
         console.log('expect one song object', data);
+        upvotes = data[0].upvotes;
+        downvotes = data[0].downvotes;
         callback({ upvotes: data[0].upvotes, downvotes: data[0].downvotes });
       })
       .catch((error)=>{
         console.log('error in retrieving song', error);
       });
+
+    console.log('vote client: ', client);
+    console.log('vote client rooms: ', client.rooms);
+    console.log('vote client id: ', client.id);
+    for (room in client.rooms) {
+      console.log('vote room: ', room);
+      // each socket is also in a room matching its own ID, so let's filter that out
+      // if ( room !== client.id ) {
+      voteId = room;
+      console.log('vote id: ', voteId);
+      console.log('can i see the upvotes here?', upvotes);
+      io.in(voteId).emit('voted', vote, songId);
+      // }
+    }
 
     // console.log('upvotes', song.upvotes, 'downvotes', song.downvotes )
   });

@@ -65,7 +65,6 @@ angular.module('tribal')
     });
   };
 
-
 })
 
 .directive('landingPage', function() {
