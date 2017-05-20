@@ -11,7 +11,7 @@ let createPlaylist = (accessToken, account, playlistName) => {
 let addSongToPlaylist = (accessToken, accountId, playlistId, songUri) => {
 
   Spotify.setAccessToken(accessToken);
-  return Spotify.addTracksToPlaylist(accountId, playlistId, songUri);
+  return Spotify.addTracksToPlaylist(accountId, playlistId, songUri, positionObj);
 };
 
 let reorderPlaylist = (accessToken, accountId, playlistId, songId) => {
