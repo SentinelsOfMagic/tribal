@@ -140,8 +140,8 @@ const inputSongUpvote = (playlistHash, songId) => {
     .catch((err) => {
       console.log('error occurred while saving upvoted song:', err);
     });
-  })
- };
+  });
+};
 
 
 
@@ -158,8 +158,8 @@ const inputSongDownvote = (playlistHash, songId) => {
     .catch((err) => {
       console.log('error occurred while finding song to downvote:', err);
     });
-  })
-
+  });
+};
 const updateSongOrderAfterVote = (songId) => {
 
 };
