@@ -1,26 +1,37 @@
 angular.module('tribal')
 
-.controller('PlaylistController', function(tribalServer, $location) {
-
-//   this.songAddedHandler = (uri) => {
-//     this.playlist.push({ uri: uri });
-//     $scope.$apply();
-//   };
-
-  // tribalServer.registerSongAddedHandler( this.songAddedHandler );
-
-  // tribalServer.getPlaylist( $location.search().playlist, (res) => {
-  //   $location.search( 'playlist', res._id );
-  //   this.playlist = res.songs;
-  //   $scope.$apply();
-  // });
-
+.controller('PlaylistController', function(tribalServer) {
+  this.playing = false;
+  // this.currentSong = false;
+  this.currentSong = {
+    item: {
+      album: {
+        images: [{}, {
+          url: 'https://i.scdn.co/image/5ca023498e951d2bdcc2b8a4b6e88717fa9b6e1f'
+        }, {
+          url: 'https://i.scdn.co/image/d866cccb797f489ca1f0046ed750d140c3ff6ca3'
+        }]
+      },
+      name: 'Bonfire',
+      artists: [{
+        name: 'Childish Gambino'
+      }]
+    }
+  };
+  this.clickPlay = ($event) => {
+    this.playing = true;
+    tribalServer.playSong();
+  };
+  this.clickPause = ($event) => {
+    this.playing = false;
+    tribalServer.pauseSong();
+  };
 })
 
 .directive('playlist', function() {
   return {
     scope: {
-      playlistUri: '<',
+      playlistUri: '<'
     },
     restrict: 'E',
     controller: 'PlaylistController',
