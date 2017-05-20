@@ -41,6 +41,8 @@ app.get('/refresh_token', Login.refreshToken);
 app.get('/addSong', (req, res, err) => {
   var playlistHash = req.query.playlistHash;
   var songUri = req.query.songUri;
+  var songArtist = req.query.artist;
+  var songTitle = req.query.title;
 
   // retrieve accountId and playlistId from DB with playlistHash
   db.retrievePlaylist(playlistHash)
@@ -59,7 +61,26 @@ app.get('/addSong', (req, res, err) => {
       apiCalls.addSongToPlaylist(accessToken, accountId, playlistId, [songUri])
       .then((data) => {
         console.log('song added to playlist successfully! ', data);
-        res.send('success');
+
+        var songId = songUri.split('spotify:track:')[1];
+
+        db.insertSongToPlaylist(playlistHash, songId, songTitle, songArtist)
+        .then((song) => {
+          console.log('song successfully inserted to database in /addSong:', song);
+
+          // push song to playlist ordered songs array
+          db.insertSongToPlaylistOrderedSongs(playlistHash, songId)
+          .then(() => {
+            console.log('song inserted to playlist ordered songs array successfully');
+            res.status(200).send();
+          })
+          .catch((err) => {
+            console.log('error occurred while adding song to playlist ordered songs:', err);
+          });
+        })
+        .catch((err) => {
+          console.log('error occurred while inserting song to playlist in /addSong:', err);
+        });
       })
       .catch((err) => {
         console.log('error occurred while adding song to playlist:', err);
@@ -111,8 +132,8 @@ app.get('/tracks', (req, res) => {
       return;
     }
 
-    tracks = parsedBody.tracks.items.map(track => {
-      return {uri: track.uri, artist: track.artists[0].name};
+    tracks = parsedBody.tracks.items.map((track) => {
+      return {uri: track.uri, artist: track.artists[0].name, title: track.name};
     });
     res.status(200).send(tracks);
     return;

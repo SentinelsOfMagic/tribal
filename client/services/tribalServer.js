@@ -6,11 +6,13 @@ const tribalServer = function( $http ) {
     return $http.get( '/test' );
   };
 
-  this.addSong = (playlistHash, songUri) => {
+  this.addSong = (playlistHash, songUri, artist, title) => {
     return $http.get('/addSong', {
       params: {
         playlistHash: playlistHash,
-        songUri: songUri
+        songUri: songUri,
+        artist: artist,
+        title: title
       }
     });
   };

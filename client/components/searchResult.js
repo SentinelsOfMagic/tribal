@@ -3,19 +3,10 @@ const SearchResultController = function($location, tribalServer) {
   this.addSongButtonHandler = () => {
     // tribalServer.addSong( this.searchResult );
     this.playlistHash = $location.search().playlist;
-    console.log(this.searchResult);
+    console.log('searchResult:', this.searchResult);
     console.log('playlistHash:', this.playlistHash);
 
-    tribalServer.addSong(this.playlistHash, this.searchResult);
-
-    // call api to add song to playlist
-    /*
-    Need:
-    - accountId (from db)
-    - accessToken (from db)
-    - playlistHash
-    - songId: this.searchResult
-    */
+    tribalServer.addSong(this.playlistHash, this.searchResult.uri, this.searchResult.artist, this.searchResult.title);
   };
 };
 
