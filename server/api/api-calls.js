@@ -14,12 +14,12 @@ let addSongToPlaylist = (accessToken, accountId, playlistId, songUri) => {
   return Spotify.addTracksToPlaylist(accountId, playlistId, songUri);
 };
 
-let reorderPlaylist = (accessToken, accountId, playlistId, songId) => {
+let reorderPlaylist = (accessToken, ...args) => {
   Spotify.setAccessToken(accessToken);
   // db logic to get new order
-  Spotify.reorderTracksInPlaylist(accountId, playlistId/*song position, new song position, {options: snapshot_id?}*/);
-  return;
+  return Spotify.reorderTracksInPlaylist(...args);
 };
 
 module.exports.createPlaylist = createPlaylist;
 module.exports.addSongToPlaylist = addSongToPlaylist;
+module.exports.reorderPlaylist = reorderPlaylist;

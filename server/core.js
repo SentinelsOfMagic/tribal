@@ -161,20 +161,20 @@ app.get('/inputVotes', (req, res) => {
 
   if (req.query.vote === 'upvote') {
     db.inputSongUpvote(req.query.hash, req.query.songId)
-      .then((data) => {
-        console.log('successfully input upvote');
-      })
-      .catch(err=> {
-        console.log('fail input upvote', err);
-      });
+    .then((songObject) => {
+      return updateSongOrderAfterVote(songObject, -1);
+    })
+    .catch(err=> {
+      console.log('fail input upvote', err);
+    });
   } else {
     db.inputSongDownvote(req.query.hash, req.query.songId)
-      .then((data) => {
-        console.log('successfully input downvote');
-      })
-      .catch(err=> {
-        console.log('fail input downvote', err);
-      });
+    .then((songObject) => {
+      return updateSongOrderAfterVote(songObject, 1);
+    })
+    .catch(err=> {
+      console.log('fail input downvote', err);
+    });
   }
   res.send('done voting');
 });
