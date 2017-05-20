@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const Login = require('./api/login-handler.js');
 const apiCalls = require('./api/api-calls.js');
+const bodyParse = require('body-parser');
 
 const app = express();
 const http = require('http').Server(app);
@@ -18,6 +19,7 @@ const DATABASE_CONNECTED_MESSAGE = 'Connected';
 const DATABASE_NOT_CONNECTED_MESSAGE = 'NOT connected';
 
 app.use(cookieParser());
+app.use(bodyParse.json());
 
 app.use((req, res, next) => {
   if (process.env.DEPLOY_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
@@ -193,7 +195,7 @@ app.get('/playlist', (req, res) => {
 
 app.post('/play', (req, res) => {
 
-  console.log('PLAY server side');
+  console.log('PLAY server side: ', req.body);
   // call Spotify API
   var playlistHash = req.body.playlist;
 
@@ -246,6 +248,7 @@ app.post('/play', (req, res) => {
 
 app.post('/resume', (req, res) => {
   // console.log('PLAY server side');
+  console.log('resume server: ', req.body);
   var playlistHash = req.body.playlist;
 
   // retrieve accountId and playlistId from DB with playlistHash
@@ -288,7 +291,7 @@ app.post('/resume', (req, res) => {
 });
 
 app.post('/pause', (req, res) => {
-  console.log('PAUSE server side');
+  console.log('PAUSE server side: ', req.body);
   // call Spotify API
   var playlistHash = req.body.playlist;
 

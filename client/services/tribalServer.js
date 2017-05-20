@@ -67,19 +67,19 @@ const tribalServer = function( $http ) {
   };
 
   this.startParty = function(playlistHash) {
-    console.log('tribalServer playSong');
+    console.log('tribalServer startParty: ', playlistHash);
     socket.emit('play');
     return $http.post('/play', { playlist: playlistHash });
   };
 
   this.playSong = function(playlistHash) {
-    console.log('tribalServer playSong');
+    console.log('tribalServer playSong: ', playlistHash);
     socket.emit('resume');
     return $http.post('/resume', { playlist: playlistHash });
   };
 
   this.pauseSong = function(playlistHash) {
-    console.log('tribalServer pauseSong');
+    console.log('tribalServer pauseSong: ', playlistHash);
     socket.emit('pause');
     return $http.post('/pause', { playlist: playlistHash });
   };
