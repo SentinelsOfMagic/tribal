@@ -22,14 +22,23 @@ angular.module('tribal')
   };
 
   this.clickPlay = ($event) => {
-    this.playing = true;
+    console.log('clickPlay');
     tribalServer.playSong(this.playlistHash);
   };
-
   this.clickPause = ($event) => {
-    this.playing = false;
+    console.log('clickPause');
     tribalServer.pauseSong(this.playlistHash);
   };
+  this.handlePlay = () => {
+    console.log('handlePlay');
+    this.playing = true;
+  };
+  this.handlePause = () => {
+    console.log('handlePause');
+    this.playing = false;
+  };
+  tribalServer.registerPlay(this.handlePlay);
+  tribalServer.registerPause(this.handlePause);
 })
 
 .directive('playlist', function() {
