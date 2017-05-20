@@ -219,9 +219,9 @@ app.post('/play', (req, res) => {
         },
         json: {
           // linter doesn't like underscore in key, but is required by Spotify api
-          context_uri: `spotify:user:${accountId}:playlist:${playlistId}`,
-          offset: {
-            position: 0
+          'context_uri': `spotify:user:${accountId}:playlist:${playlistId}`,
+          'offset': {
+            'position': 0
           }
         }
       };
