@@ -330,6 +330,49 @@ app.post('/pause', (req, res) => {
   });
 });
 
+app.post('/currentSong', (req, res) => {
+  var playlistHash = req.body.playlist;
+
+  db.retrievePlaylist(playlistHash)
+  .then((playlistData) => {
+
+    var accountId = playlistData.accountId;
+    var playlistId = playlistData.playlistId;
+
+    db.retrieveAccount(accountId)
+    .then((accountData) => {
+      var accessToken = accountData.accessToken;
+      console.log('accessToken: ', accessToken);
+
+      var options = {
+        url: 'https://api.spotify.com/v1/me/player/currently-playing',
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + 'BQBcMpwFQpOWOkHCaKNvqNmeIaLygYxmQVQowxtjyYfs7MmS3qO__wsOKmUzqbcgKvFdZ0cyXjV8Sw92z2RjI7nI66eDxOT4yFdtiriTqGFE9wvdm037u2In7o-WYe9JOV1KJ1534peBqYN96J7Nt9BHiR29g94ePQ-2pyZll_rYIiFh0bHrQXqB_BcMXlgKz1BbaNNerT2RCjjqGvfc7qae8HU_7_sPqLzEy1bD2IEJo1-7hPf7MNtvedO_jiOUYOhlZRmvzhIip03SOFcsjY73ioZgYVaIUYFBMc2eiHhQDJw_s9kuLpswzP-oN1JVyqWGYg'
+        }
+      };
+
+      request(options, (err, resp, body) => {
+        if (err) {
+          console.log('api call /currentSong unsuccessful: ', err);
+          res.sendStatus(404);
+        } else {
+          console.log('api call /currentSong successful: ', body);
+          res.send(body);
+        }
+      });
+    })
+    .catch((err) => {
+      console.log('error occurred while retrieving accountData in /currentSong:', err);
+      res.sendStatus(404);
+    });
+  })
+  .catch((err) => {
+    console.log('Unable to retrieve playlist data in /currentSong: ', err);
+    res.sendStatus(404);
+  });
+});
+
 // socket.io framework
 io.on( 'connection', function(client) {
 
@@ -347,6 +390,24 @@ io.on( 'connection', function(client) {
       playlistId = room;
       console.log('play id: ', playlistId);
       io.in(playlistId).emit('playing');
+      // }
+    }
+  });
+
+  client.on('resume', () => {
+    console.log('socket resume');
+    let playlistId;
+    console.log('resume client: ', client);
+    console.log('resume client rooms: ', client.rooms);
+    console.log('resume client id: ', client.id);
+    for (room in client.rooms) {
+      console.log('resume room: ', room);
+      // each socket is also in a room matching its own ID, so let's filter that out
+      // if ( room !== client.id ) {
+      console.log('if statement - resume');
+      playlistId = room;
+      console.log('resume id: ', playlistId);
+      io.in(playlistId).emit('resuming');
       // }
     }
   });
