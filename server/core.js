@@ -77,7 +77,11 @@ app.get('/addSong', (req, res, err) => {
           //console.log('song successfully inserted to database in /addSong:', song);
 
           // push song to playlist ordered songs array
-          db.insertSongToPlaylistOrderedSongs(playlistHash, songId)
+          db.insertSongToPlaylistOrderedSongs(playlistHash, song._id)
+          .then((playlist) => {
+            let len = playlist.orderedSongs.length - 1;
+            return db.updateSongIndex(playlist.orderedSongs[len], len);
+          })
           .then(() => {
             console.log('song inserted to playlist ordered songs array successfully');
             res.status(200).send();
@@ -161,20 +165,20 @@ app.get('/inputVotes', (req, res) => {
 
   if (req.query.vote === 'upvote') {
     db.inputSongUpvote(req.query.hash, req.query.songId)
-      .then((data) => {
-        console.log('successfully input upvote');
-      })
-      .catch(err=> {
-        console.log('fail input upvote', err);
-      });
+    .then((songObject) => {
+      return db.updateSongOrderAfterVote(songObject, -1);
+    })
+    .catch(err=> {
+      console.log('fail input upvote', err);
+    });
   } else {
     db.inputSongDownvote(req.query.hash, req.query.songId)
-      .then((data) => {
-        console.log('successfully input downvote');
-      })
-      .catch(err=> {
-        console.log('fail input downvote', err);
-      });
+    .then((songObject) => {
+      return db.updateSongOrderAfterVote(songObject, 1);
+    })
+    .catch(err=> {
+      console.log('fail input downvote', err);
+    });
   }
   res.send('done voting');
 });
