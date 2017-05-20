@@ -197,12 +197,28 @@ app.get('/playlist', (req, res) => {
     });
 });
 
+app.post('/playlistStatus', (req, res) => {
+  console.log('Querying /playlistStatus... ', req.body);
+  db.retrievePlaylist(req.body.playlist)
+    .then(data => {
+      console.log('/playlistStarted successfully retrieved: ', data);
+      res.send(data);
+    })
+    .catch(err => {
+      console.log('Unable to retrieve /playlistStarted data: ', err);
+      res.sendStatus(404);
+    });
+});
+
 app.post('/play', (req, res) => {
 
   console.log('PLAY server side: ', req.body);
   // call Spotify API
   var playlistHash = req.body.playlist;
 
+  db.updatePlaylist(playlistHash)
+    .then(() => console.log('Playlist started'))
+    .catch(err => console.log('Unable to update playlist: ', err));
   // retrieve accountId and playlistId from DB with playlistHash
   db.retrievePlaylist(playlistHash)
   .then((playlistData) => {
@@ -255,6 +271,9 @@ app.post('/resume', (req, res) => {
   console.log('resume server: ', req.body);
   var playlistHash = req.body.playlist;
 
+  db.playPlaylist(playlistHash)
+    .then(() => console.log('Playlist playing'))
+    .catch(err => console.log('Unable to play playlist: ', err));
   // retrieve accountId and playlistId from DB with playlistHash
   db.retrievePlaylist(playlistHash)
   .then((playlistData) => {
@@ -298,6 +317,10 @@ app.post('/pause', (req, res) => {
   console.log('PAUSE server side: ', req.body);
   // call Spotify API
   var playlistHash = req.body.playlist;
+
+  db.pausePlaylist(playlistHash)
+    .then(() => console.log('Playlist paused'))
+    .catch(err => console.log('Unable to pause playlist: ', err));
 
   // retrieve accountId and playlistId from DB with playlistHash
   db.retrievePlaylist(playlistHash)
@@ -355,7 +378,7 @@ app.post('/currentSong', (req, res) => {
         url: 'https://api.spotify.com/v1/me/player/currently-playing',
         method: 'GET',
         headers: {
-          'Authorization': 'Bearer ' + 'BQBcMpwFQpOWOkHCaKNvqNmeIaLygYxmQVQowxtjyYfs7MmS3qO__wsOKmUzqbcgKvFdZ0cyXjV8Sw92z2RjI7nI66eDxOT4yFdtiriTqGFE9wvdm037u2In7o-WYe9JOV1KJ1534peBqYN96J7Nt9BHiR29g94ePQ-2pyZll_rYIiFh0bHrQXqB_BcMXlgKz1BbaNNerT2RCjjqGvfc7qae8HU_7_sPqLzEy1bD2IEJo1-7hPf7MNtvedO_jiOUYOhlZRmvzhIip03SOFcsjY73ioZgYVaIUYFBMc2eiHhQDJw_s9kuLpswzP-oN1JVyqWGYg'
+          'Authorization': 'Bearer ' + accessToken
         }
       };
 
@@ -383,57 +406,39 @@ app.post('/currentSong', (req, res) => {
 // socket.io framework
 io.on( 'connection', function(client) {
 
-  client.on('play', () => {
-    console.log('socket play');
-    let playlistId;
-    console.log('play client: ', client);
-    console.log('play client rooms: ', client.rooms);
-    console.log('play client id: ', client.id);
+  client.on('start', () => {
+    console.log('start client rooms: ', client.rooms);
+    console.log('start client id: ', client.id);
     for (room in client.rooms) {
-      console.log('play room: ', room);
-      // each socket is also in a room matching its own ID, so let's filter that out
-      // if ( room !== client.id ) {
-      console.log('if statement - play');
-      playlistId = room;
-      console.log('play id: ', playlistId);
-      io.in(playlistId).emit('playing');
-      // }
+      console.log('start room: ', room);
+      if (room !== client.id) {
+        console.log('start id: ', room);
+        io.in(room).emit('starting');
+      }
     }
   });
 
   client.on('resume', () => {
-    console.log('socket resume');
-    let playlistId;
-    console.log('resume client: ', client);
     console.log('resume client rooms: ', client.rooms);
     console.log('resume client id: ', client.id);
     for (room in client.rooms) {
       console.log('resume room: ', room);
-      // each socket is also in a room matching its own ID, so let's filter that out
-      // if ( room !== client.id ) {
-      console.log('if statement - resume');
-      playlistId = room;
-      console.log('resume id: ', playlistId);
-      io.in(playlistId).emit('resuming');
-      // }
+      if (room !== client.id) {
+        console.log('resume id: ', room);
+        io.in(room).emit('resuming');
+      }
     }
   });
 
   client.on('pause', () => {
-    console.log('socket pause');
-    let playlistId;
-    console.log('pause client: ', client);
     console.log('pause client rooms: ', client.rooms);
     console.log('pause client id: ', client.id);
     for (room in client.rooms) {
       console.log('pause room: ', room);
-      // each socket is also in a room matching its own ID, so let's filter that out
-      // if ( room !== client.id ) {
-      console.log('if statement - pause');
-      playlistId = room;
-      console.log('pause id: ', playlistId);
-      io.in(playlistId).emit('paused');
-      // }
+      if (room !== client.id) {
+        console.log('pause id: ', room);
+        io.in(room).emit('paused');
+      }
     }
   });
 
@@ -469,41 +474,15 @@ io.on( 'connection', function(client) {
     io.in(playlistId).emit('song added', uri);
   });
 
-  // (new or existing) playlist requests
-  client.on( 'playlist', function(playlistId, callback) {
-    let playlist;
-    let p;
+  client.on('playlist', function(playlistHash) {
+    console.log(`Client requesting playlist ${playlistHash}`);
 
-    if ( playlistId ) {
-      console.log( `Client requesting playlist ${playlistId}` );
-
-      p = db.getSinglePlaylist( playlistId )
-        .then( (doc) => {
-          if ( !doc ) {
-            throw new Error( 'playListNotFound' );
-          }
-          return doc;
-        })
-        .catch(
-          (err) => (err.message === 'playListNotFound' ),
-          () => {
-            return db.createPlaylist();
-          });
-
-    } else {
-
-      console.log( 'Client requesting new playlist' );
-      p = db.createPlaylist();
-    }
-
-    p.then( (doc) => {
-      // put this client in a socket.io room corresponding to this playlist
-      client.join( doc._id.toString() );
-      callback({ _id: doc._id.toString(), songs: doc.songs });
-    })
-    .catch( (err) => {
-      console.log( err );
-    });
+    db.retrievePlaylist(playlistHash)
+      .then(data => {
+        console.log('got playlist: ', data._id);
+        client.join(data._id.toString());
+      })
+      .catch(err => console.log('Unable to get playlist: ', err));
   });
 
   client.on('disconnect', function() {
