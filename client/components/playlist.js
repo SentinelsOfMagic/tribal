@@ -2,8 +2,7 @@ angular.module('tribal')
 
 .controller('PlaylistController', function($location, tribalServer) {
   this.playlistHash = $location.search().playlist;
-
-  this.playing = false;
+  this.partying = false;
   // this.currentSong = false;
   this.currentSong = {
     item: {
@@ -20,7 +19,11 @@ angular.module('tribal')
       }]
     }
   };
-
+  this.startParty = ($event) => {
+    console.log('startParty');
+    this.partying = true;
+    tribalServer.startParty(this.playlistHash);
+  };
   this.clickPlay = ($event) => {
     console.log('clickPlay');
     tribalServer.playSong(this.playlistHash);
@@ -44,7 +47,8 @@ angular.module('tribal')
 .directive('playlist', function() {
   return {
     scope: {
-      playlistUri: '<'
+      playlistUri: '<',
+      songs: '<'
     },
     restrict: 'E',
     controller: 'PlaylistController',
