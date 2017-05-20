@@ -113,7 +113,7 @@ let callback = (req, res) => {
       res.redirect(`/?playlist=${dbPlaylist}`);
     })
     .catch((err) => {
-      console.log(err);
+      console.log('Login handler err', err);
       res.redirect('/#' +
           querystring.stringify({
             error: err

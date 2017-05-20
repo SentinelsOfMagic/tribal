@@ -32,6 +32,10 @@ app.use((req, res, next) => {
   }
 });
 
+// serve up client files
+app.use(express.static(`${__dirname}/../client`));
+app.use(express.static(`${__dirname}/../node_modules`));
+
 // Spotify login routes
 app.get('/login', Login.login);
 app.get('/callback', Login.callback);
@@ -54,19 +58,19 @@ app.get('/addSong', (req, res, err) => {
     // retrieve accessToken with accountId
     db.retrieveAccount(accountId)
     .then((accountData) => {
-      console.log('retrieved accountData successfully in /addSong:', accountData);
+      //console.log('retrieved accountData successfully in /addSong:', accountData);
       var accessToken = accountData.accessToken;
       // var refreshToken = accountData.refreshToken; // not needed right now
 
       apiCalls.addSongToPlaylist(accessToken, accountId, playlistId, [songUri])
       .then((data) => {
-        console.log('song added to playlist successfully! ', data);
+        //console.log('song added to playlist successfully! ', data);
 
         var songId = songUri.split('spotify:track:')[1];
 
         db.insertSongToPlaylist(playlistHash, songId, songTitle, songArtist)
         .then((song) => {
-          console.log('song successfully inserted to database in /addSong:', song);
+          //console.log('song successfully inserted to database in /addSong:', song);
 
           // push song to playlist ordered songs array
           db.insertSongToPlaylistOrderedSongs(playlistHash, songId)
@@ -113,9 +117,6 @@ app.get('/clients', (req, res) => {
   res.status(200).send(message);
 });
 
-// serve up client files
-app.use(express.static(`${__dirname}/../client`));
-app.use(express.static(`${__dirname}/../node_modules`));
 
 // Query Spotify's Search API for a track name, and return an array of all matching tracks. Each track in the response will
 // be an object with properties uri and artist name.
@@ -151,19 +152,22 @@ app.get('/grabSongsData', (req, res) => {
 });
 
 app.get('/inputVotes', (req, res) => {
+
   console.log('expect hash and songId', req.query.hash, req.query.songId);
+
   if (req.query.vote === 'upvote') {
     db.inputSongUpvote(req.query.hash, req.query.songId);
   } else {
     db.inputSongDownvote(req.query.hash, req.query.songId);
   }
+  res.send('done voting');
 });
 
 app.get('/playlist', (req, res) => {
   console.log('Querying Playlist table... ', req.query);
   db.retrievePlaylist(req.query.playlist)
     .then(data => {
-      console.log('Playlist data successfully retrieved: ', data);
+      //console.log('Playlist data successfully retrieved: ', data);
       var playlistUri = `spotify:user:${data.accountId}:playlist:${data.playlistId}`;
       res.send(playlistUri);
     })
