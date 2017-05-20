@@ -116,8 +116,8 @@ const retrieveAllSongsForPlaylist = (playlistHash) => {
   return Song.find({playlistHash: playlistHash});
 };
 
-const inputSongUpvote = (playlistHash, songId) => {
-  return Song.find({playlistHash: playlistHash, songId: songId})
+const inputSongUpvote = (playlistHash, _id) => {
+  return Song.find({playlistHash: playlistHash, _id: _id})
   .then((song) => {
     song.upvotes++;
     song.net = song.upvotes - song.downvotes;
@@ -135,8 +135,8 @@ const inputSongUpvote = (playlistHash, songId) => {
   });
 };
 
-const inputSongDownvote = (playlistHash, songId) => {
-  return Song.find({playlistHash: playlistHash, songId: songId})
+const inputSongDownvote = (playlistHash, _id) => {
+  return Song.find({playlistHash: playlistHash, _id: _id})
   .then((song) => {
     song.downvotes++;
     song.net = song.upvotes - song.downvotes;
