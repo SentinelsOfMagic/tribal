@@ -17,6 +17,7 @@ let addSongToPlaylist = (accessToken, accountId, playlistId, songUri) => {
 let reorderPlaylist = (accessToken, ...args) => {
   Spotify.setAccessToken(accessToken);
   // db logic to get new order
+  console.log(...args);
   return Spotify.reorderTracksInPlaylist(...args);
 };
 
