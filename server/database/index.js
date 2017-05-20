@@ -42,7 +42,9 @@ const PlaylistSchema = mongoose.Schema({
     unique: true
   },
   accountId: String,
-  orderedSongs: [{type: String}]
+  orderedSongs: [{type: String}],
+  started: Boolean,
+  playing: Boolean
 });
 
 const Playlist = mongoose.model('Playlist', PlaylistSchema);
@@ -51,7 +53,9 @@ const insertPlaylist = (playlistId, accountId) => {
   return Playlist.create({
     playlistId: playlistId,
     accountId: accountId,
-    orderedSongs: []
+    orderedSongs: [],
+    started: false,
+    playing: false
   })
   .then((playlist) => {
     //console.log('playlist successfully inserted to db:', playlist);
@@ -62,11 +66,20 @@ const insertPlaylist = (playlistId, accountId) => {
   });
 };
 
-// DELETE LATER - just dummy data that April is using
-// insertPlaylist('6A66KGoajMxC6eE7IgJrE7', '1233151550');
-
 const retrievePlaylist = (playlistHash) => {
   return Playlist.findById(playlistHash);
+};
+
+const updatePlaylist = (playlistHash) => {
+  return Playlist.findOneAndUpdate({_id: playlistHash}, {started: true, playing: true});
+};
+
+const pausePlaylist = (playlistHash) => {
+  return Playlist.findOneAndUpdate({_id: playlistHash}, {playing: false});
+};
+
+const playPlaylist = (playlistHash) => {
+  return Playlist.findOneAndUpdate({_id: playlistHash}, {playing: true});
 };
 
 const insertSongToPlaylistOrderedSongs = (playlistHash, songId) => {
@@ -111,17 +124,6 @@ const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist) => {
 
   return newSong.save();
 };
-
-// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Over You', 'SAFIA', 1);
-// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Twice', 'Catfish and the Bottlemen', 2);
-// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Outcast at Last', 'Sticky Fingers', 3);
-// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Dang! (feat. Anderson .Paak)', 'Mac Miller, Anderson .Paak', 4);
-// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Step up the Morphine', 'DMA\'S', 5);
-// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Sad Songs', 'Sticky Fingers', 6);
-// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Bullshit', 'Dune Rats', 7);
-// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Notion', 'Tash Sultana', 8);
-// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Our Town', 'Sticky Fingers', 9);
-// insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Make Them Wheels Roll', 'SAFIA', 10);
 
 const retrieveAllSongsForPlaylist = (playlistHash) => {
   return Song.find({playlistHash: playlistHash});
@@ -264,6 +266,9 @@ module.exports.insertAccount = insertAccount;
 module.exports.retrieveAccount = retrieveAccount;
 module.exports.insertPlaylist = insertPlaylist;
 module.exports.retrievePlaylist = retrievePlaylist;
+module.exports.updatePlaylist = updatePlaylist;
+module.exports.pausePlaylist = pausePlaylist;
+module.exports.playPlaylist = playPlaylist;
 module.exports.insertSongToPlaylistOrderedSongs = insertSongToPlaylistOrderedSongs;
 module.exports.insertSongToPlaylist = insertSongToPlaylist;
 module.exports.retrieveAllSongsForPlaylist = retrieveAllSongsForPlaylist;
