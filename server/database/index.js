@@ -40,7 +40,8 @@ const PlaylistSchema = mongoose.Schema({
     type: String,
     unique: true
   },
-  accountId: String
+  accountId: String,
+  orderedSongs: [{type: String}]
 });
 
 const Playlist = mongoose.model('Playlist', PlaylistSchema);
@@ -48,7 +49,8 @@ const Playlist = mongoose.model('Playlist', PlaylistSchema);
 const insertPlaylist = (playlistId, accountId) => {
   return Playlist.create({
     playlistId: playlistId,
-    accountId: accountId
+    accountId: accountId,
+    orderedSongs: []
   })
   .then((playlist) => {
     console.log('playlist successfully inserted to db:', playlist);
@@ -66,6 +68,14 @@ const retrievePlaylist = (playlistHash) => {
   return Playlist.findById(playlistHash);
 };
 
+const insertSongToPlaylistOrderedSongs = (playlistHash, songId) => {
+  return Playlist.findOneAndUpdate(
+    {_id: playlistHash},
+    {$push: {orderedSongs: songId}},
+    {upsert: true, new: true}
+  );
+};
+
 // Songs
 const SongSchema = mongoose.Schema({
   songId: String,
@@ -80,7 +90,7 @@ const SongSchema = mongoose.Schema({
 
 const Song = mongoose.model('Song', SongSchema);
 
-const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist, index) => {
+const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist) => {
   var newSong = new Song({
     playlistHash: playlistHash,
     songId: songId,
@@ -89,16 +99,10 @@ const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist, index
     upvotes: 0,
     downvotes: 0,
     net: 0,
-    index: index
+    index: 0
   });
 
-  return newSong.save()
-  .then((song) => {
-    console.log('song successfully inserted to database:', song);
-  })
-  .catch((err) => {
-    console.log('error occurred while inserting song to playlist:', err);
-  });
+  return newSong.save();
 };
 
 // insertSongToPlaylist('591e56f6835cbb2a56f09852', 'asdf', 'Over You', 'SAFIA', 1);
@@ -204,6 +208,7 @@ module.exports.insertAccount = insertAccount;
 module.exports.retrieveAccount = retrieveAccount;
 module.exports.insertPlaylist = insertPlaylist;
 module.exports.retrievePlaylist = retrievePlaylist;
+module.exports.insertSongToPlaylistOrderedSongs = insertSongToPlaylistOrderedSongs;
 module.exports.insertSongToPlaylist = insertSongToPlaylist;
 module.exports.retrieveAllSongsForPlaylist = retrieveAllSongsForPlaylist;
 module.exports.inputSongUpvote = inputSongUpvote;

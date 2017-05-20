@@ -7,7 +7,12 @@ angular.module('tribal')
     });
 
   this.searchResultsHandler = (results) => {
-    this.searchResults = results.data.map(result => result.uri);
+    this.searchResults = results.data;
+
+    // no mapping needed
+    // .map((result) => {
+    //   return {uri: result.uri, artist: result.artist, title: result.title};
+    // });
   };
 })
 
