@@ -226,12 +226,21 @@ app.post('/play', (req, res) => {
     // console.log('retrieved playlistData successfully in /play:', playlistData);
     var accountId = playlistData.accountId;
     var playlistId = playlistData.playlistId;
+    var firstSongId = playlistData.orderedSongs[0];
 
     // retrieve accessToken with accountId
     db.retrieveAccount(accountId)
     .then((accountData) => {
       var accessToken = accountData.accessToken;
       // var refreshToken = accountData.refreshToken; // not needed right now
+
+      db.retrieveSongWithSongIdForPlaylist(firstSongId, playlistHash)
+      .then((songData) => {
+        var duration = songData.duration;
+      })
+      .catch((err) => {
+        console.log('error in retrieving song in /play:', err);
+      });
 
       // call Spotify API
       var options = {
