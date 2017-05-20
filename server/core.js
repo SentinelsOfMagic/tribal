@@ -357,7 +357,7 @@ app.post('/currentSong', (req, res) => {
           console.log('api call /currentSong unsuccessful: ', err);
           res.sendStatus(404);
         } else {
-          console.log('api call /currentSong successful: ', body);
+          console.log('api call /currentSong successful');
           res.send(body);
         }
       });
