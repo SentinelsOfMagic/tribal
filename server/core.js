@@ -4,7 +4,6 @@ const Promise = require('bluebird');
 const request = require('request');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const Login = require('./api/login-handler.js');
 const apiCalls = require('./api/api-calls.js');
 
@@ -19,7 +18,6 @@ const DATABASE_CONNECTED_MESSAGE = 'Connected';
 const DATABASE_NOT_CONNECTED_MESSAGE = 'NOT connected';
 
 app.use(cookieParser());
-app.use(bodyParser.json());
 
 app.use((req, res, next) => {
   if (process.env.DEPLOY_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
@@ -160,9 +158,21 @@ app.get('/inputVotes', (req, res) => {
   console.log('expect hash and songId', req.query.hash, req.query.songId);
 
   if (req.query.vote === 'upvote') {
-    db.inputSongUpvote(req.query.hash, req.query.songId);
+    db.inputSongUpvote(req.query.hash, req.query.songId)
+      .then((data) => {
+        console.log('successfully input upvote');
+      })
+      .catch(err=> {
+        console.log('fail input upvote', err);
+      });
   } else {
-    db.inputSongDownvote(req.query.hash, req.query.songId);
+    db.inputSongDownvote(req.query.hash, req.query.songId)
+      .then((data) => {
+        console.log('successfully input downvote');
+      })
+      .catch(err=> {
+        console.log('fail input downvote', err);
+      });
   }
   res.send('done voting');
 });
@@ -272,48 +282,14 @@ app.post('/resume', (req, res) => {
     console.log('Unable to retrieve playlist data in /play: ', err);
     res.sendStatus(404);
   });
+
 });
 
 app.post('/pause', (req, res) => {
-  // console.log('PAUSE server side');
-  var playlistHash = req.body.playlist;
-
-  // retrieve accountId and playlistId from DB with playlistHash
-  db.retrievePlaylist(playlistHash)
-  .then((playlistData) => {
-    // console.log('retrieved playlistData successfully in /pause:', playlistData);
-    var accountId = playlistData.accountId;
-    var playlistId = playlistData.playlistId;
-
-    // retrieve accessToken with accountId
-    db.retrieveAccount(accountId)
-    .then((accountData) => {
-      var accessToken = accountData.accessToken;
-      // var refreshToken = accountData.refreshToken; // not needed right now
-
-      // call Spotify API
-      var options = {
-        url: 'https://api.spotify.com/v1/me/player/pause',
-        method: 'PUT',
-        headers: {
-          'Authorization': 'Bearer ' + accessToken
-        }
-      };
-
-      request(options, (err, resp, body) => {
-        console.log('api call /pause successful');
-        res.sendStatus(201);
-      });
-    })
-    .catch((err) => {
-      console.log('error occurred while retrieving accountData in /pause:', err);
-      res.sendStatus(404);
-    });
-  })
-  .catch((err) => {
-    console.log('Unable to retrieve playlist data in /pause: ', err);
-    res.sendStatus(404);
-  });
+  console.log('PAUSE server side');
+  // call Spotify API
+  // https://developer.spotify.com/web-api/console/put-pause/
+  res.sendStatus(201);
 });
 
 // socket.io framework
