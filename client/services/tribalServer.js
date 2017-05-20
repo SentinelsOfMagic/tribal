@@ -84,14 +84,24 @@ const tribalServer = function( $http ) {
     return $http.post('/pause', { playlist: playlistHash });
   };
 
+  this.registerStartParty = function(callback) {
+    console.log('registerStartParty: ', callback);
+    socket.on('playing', callback);
+  };
+
   this.registerPlay = function(callback) {
     console.log('registerPlay: ', callback);
-    socket.on('playing', callback);
+    socket.on('resuming', callback);
   };
 
   this.registerPause = function(callback) {
     console.log('registerPause: ', callback);
     socket.on('paused', callback);
+  };
+
+  this.getCurrentSong = function(playlistHash) {
+    console.log('getCurrentSong: ', playlistHash);
+    return $http.post('/currentSong', { playlist: playlistHash });
   };
 };
 
