@@ -209,6 +209,7 @@ module.exports.insertSongToPlaylist = insertSongToPlaylist;
 module.exports.retrieveAllSongsForPlaylist = retrieveAllSongsForPlaylist;
 module.exports.inputSongUpvote = inputSongUpvote;
 module.exports.inputSongDownvote = inputSongDownvote;
+module.exports.retrieveSongForPlaylist = retrieveSongForPlaylist;
 
 
 // old exports
