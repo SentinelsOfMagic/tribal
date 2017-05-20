@@ -442,35 +442,60 @@ io.on( 'connection', function(client) {
     }
   });
 
-  client.on('voting', function(vote, songId, hash, callback) {
+  client.on('voting', function(vote, songId, hash, $index, callback) {
     //look in the database for song and then the upvotes/downvotes for that song
-    var upvotes;
-    var downvotes;
 
-    db.retrieveSongForPlaylist(songId, hash, callback)
+    db.retrieveAllSongsForPlaylist(hash, callback)
       .then((data)=>{
-        console.log('expect one song object', data);
-        upvotes = data[0].upvotes;
-        downvotes = data[0].downvotes;
-        callback({ upvotes: data[0].upvotes, downvotes: data[0].downvotes });
+        var upvotes = [];
+        var downvotes = [];
+        for (var i = 0; i < data.length; i++) {
+          console.log('what does data look like?', data);
+          upvotes.push(data[i].upvotes);
+          downvotes.push(data[i].downvotes);
+          callback({ upvotes: upvotes, downvotes: downvotes });
+          for (room in client.rooms) {
+            console.log('vote room: ', room);
+            // each socket is also in a room matching its own ID, so let's filter that out
+            // if ( room !== client.id ) {
+            voteId = room;
+            console.log('vote id: ', voteId);
+            console.log('can i see the upvotes here?', upvotes);
+            console.log('can i see the downvotes here?', downvotes);
+            io.in(voteId).emit('voted', upvotes, downvotes, $index);
+            // }
+          }
+        }
       })
-      .catch((error)=>{
-        console.log('error in retrieving song', error);
+      .catch((error) => {
+        console.log('error in retrieving all songs for playlist', error);
       });
+
+
+    // db.retrieveSongForPlaylist(songId, hash, callback)
+    //   .then((data)=>{
+    //     console.log('expect one song object', data);
+    //     callback({ upvotes: data[0].upvotes, downvotes: data[0].downvotes });
+    //     var upvotes = data[0].upvotes;
+    //     var downvotes = data[0].downvotes;
+    //     for (room in client.rooms) {
+    //       console.log('vote room: ', room);
+    //       // each socket is also in a room matching its own ID, so let's filter that out
+    //       // if ( room !== client.id ) {
+    //       voteId = room;
+    //       console.log('vote id: ', voteId);
+    //       console.log('can i see the upvotes here?', upvotes);
+    //       io.in(voteId).emit('voted', upvotes, downvotes);
+    //       // }
+    //     }
+    //   })
+    //   .catch((error)=>{
+    //     console.log('error in retrieving song', error);
+    //   });
 
     console.log('vote client: ', client);
     console.log('vote client rooms: ', client.rooms);
     console.log('vote client id: ', client.id);
-    for (room in client.rooms) {
-      console.log('vote room: ', room);
-      // each socket is also in a room matching its own ID, so let's filter that out
-      // if ( room !== client.id ) {
-      voteId = room;
-      console.log('vote id: ', voteId);
-      console.log('can i see the upvotes here?', upvotes);
-      io.in(voteId).emit('voted', vote, songId);
-      // }
-    }
 
     // console.log('upvotes', song.upvotes, 'downvotes', song.downvotes )
   });

@@ -17,13 +17,14 @@ const tribalServer = function( $http ) {
     });
   };
 
-  this.insertVotes = function(vote, songId, hash, callback) {
-    socket.emit('voting', vote, songId, hash, callback);
+  this.insertVotes = function(vote, songId, hash, $index, callback) {
+    socket.emit('voting', vote, songId, hash, $index, callback);
     return $http.get('/inputVotes', {
       params: {
         vote: vote,
         songId: songId,
-        hash: hash
+        hash: hash,
+        index: $index
       }
     });
   };
