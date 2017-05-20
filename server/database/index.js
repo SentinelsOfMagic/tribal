@@ -126,19 +126,39 @@ const retrieveAllSongsForPlaylist = (playlistHash) => {
   return Song.find({playlistHash: playlistHash});
 };
 
+
 const inputSongUpvote = (playlistHash, songId) => {
   return Song.findOneAndUpdate({playlistHash: playlistHash, songId: songId}, {$inc: {upvotes: 1}})
-  .catch((err) => {
-    console.log('error occurred while saving upvoted song:', err);
-  });
-};
+  .then((song) => {
+    song.upvotes++;
+    song.net = song.upvotes - song.downvotes;
+
+    song.save()
+    .then((upvotedSong) => {
+      console.log('song upvote successfully inserted:', upvotedSong);
+    })
+    .catch((err) => {
+      console.log('error occurred while saving upvoted song:', err);
+    });
+  })
+ };
+
+
 
 const inputSongDownvote = (playlistHash, songId) => {
   return Song.findOneAndUpdate({playlistHash: playlistHash, songId: songId}, {$inc: {downvotes: 1}})
-  .catch((err) => {
-    console.log('error occurred while finding song to downvote:', err);
-  });
-};
+  .then((song) => {
+    song.downvotes++;
+    song.net = song.upvotes - song.downvotes;
+
+    song.save()
+    .then((downvotedSong) => {
+      console.log('song downvote successfully inserted:', downvotedSong);
+    })
+    .catch((err) => {
+      console.log('error occurred while finding song to downvote:', err);
+    });
+  })
 
 const updateSongOrderAfterVote = (songId) => {
 
