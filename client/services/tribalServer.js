@@ -37,8 +37,10 @@ const tribalServer = function( $http ) {
   };
 
   // get (new or existing) playlist from server
-  this.getPlaylist = function( playlistId, callback ) {
-    socket.emit( 'playlist', playlistId, callback );
+  this.getPlaylist = function(hash) {
+    console.log('get playlist: ', hash);
+    socket.emit('playlist', hash);
+    return $http.post('/playlistStatus', { playlist: hash });
   };
 
   // // request that the server add a song to the playlist
@@ -68,11 +70,11 @@ const tribalServer = function( $http ) {
 
   this.startParty = function(playlistHash) {
     console.log('tribalServer startParty: ', playlistHash);
-    socket.emit('play');
+    socket.emit('start');
     return $http.post('/play', { playlist: playlistHash });
   };
 
-  this.playSong = function(playlistHash) {
+  this.resumeSong = function(playlistHash) {
     console.log('tribalServer playSong: ', playlistHash);
     socket.emit('resume');
     return $http.post('/resume', { playlist: playlistHash });
@@ -86,7 +88,7 @@ const tribalServer = function( $http ) {
 
   this.registerStartParty = function(callback) {
     console.log('registerStartParty: ', callback);
-    socket.on('playing', callback);
+    socket.on('starting', callback);
   };
 
   this.registerPlay = function(callback) {
