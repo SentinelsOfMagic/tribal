@@ -14,7 +14,10 @@ let addSongToPlaylist = (accessToken, accountId, playlistId, songUri) => {
   return Spotify.addTracksToPlaylist(accountId, playlistId, songUri);
 };
 
-let reorderPlaylist = () => {
+let reorderPlaylist = (accessToken, accountId, playlistId, songId) => {
+  Spotify.setAccessToken(accessToken);
+  // db logic to get new order
+  Spotify.reorderTracksInPlaylist(accountId, playlistId/*song position, new song position, {options: snapshot_id?}*/);
   return;
 };
 

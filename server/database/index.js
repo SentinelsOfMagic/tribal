@@ -53,7 +53,7 @@ const insertPlaylist = (playlistId, accountId) => {
     orderedSongs: []
   })
   .then((playlist) => {
-    console.log('playlist successfully inserted to db:', playlist);
+    //console.log('playlist successfully inserted to db:', playlist);
     return playlist._id;
   })
   .catch((err) => {
@@ -83,9 +83,13 @@ const SongSchema = mongoose.Schema({
   songArtist: String,
   upvotes: Number,
   downvotes: Number,
-  net: Number,
+  //net: Number,
   index: Number,
   playlistHash: String
+});
+
+SongSchema.virtual('net').get(function() {
+  return this.upvotes - this.downvotes;
 });
 
 const Song = mongoose.model('Song', SongSchema);
@@ -98,7 +102,7 @@ const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist) => {
     songArtist: songArtist,
     upvotes: 0,
     downvotes: 0,
-    net: 0,
+    // net: 0,
     index: 0
   });
 
@@ -121,41 +125,21 @@ const retrieveAllSongsForPlaylist = (playlistHash) => {
 };
 
 const inputSongUpvote = (playlistHash, songId) => {
-  return Song.find({playlistHash: playlistHash, songId: songId})
-  .then((song) => {
-    song.upvotes++;
-    song.net = song.upvotes - song.downvotes;
-
-    song.save()
-    .then((upvotedSong) => {
-      console.log('song upvote successfully inserted:', upvotedSong);
-    })
-    .catch((err) => {
-      console.log('error occurred while saving upvoted song:', err);
-    });
-  })
+  return Song.findOneAndUpdate({playlistHash: playlistHash, songId: songId}, {$inc: {upvotes: 1}})
   .catch((err) => {
-    console.log('error occurred while finding song to upvote:', err);
+    console.log('error occurred while saving upvoted song:', err);
   });
 };
 
 const inputSongDownvote = (playlistHash, songId) => {
-  return Song.find({playlistHash: playlistHash, songId: songId})
-  .then((song) => {
-    song.downvotes++;
-    song.net = song.upvotes - song.downvotes;
-
-    song.save()
-    .then((downvotedSong) => {
-      console.log('song downvote successfully inserted:', downvotedSong);
-    })
-    .catch((err) => {
-      console.log('error occurred while saving downvoted song:', err);
-    });
-  })
+  return Song.findOneAndUpdate({playlistHash: playlistHash, songId: songId}, {$inc: {downvotes: 1}})
   .catch((err) => {
     console.log('error occurred while finding song to downvote:', err);
   });
+};
+
+const updateSongOrderAfterVote = (songId) => {
+
 };
 
 
