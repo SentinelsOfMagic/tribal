@@ -48,6 +48,8 @@ app.get('/addSong', (req, res, err) => {
   var songUri = req.query.songUri;
   var songArtist = req.query.artist;
   var songTitle = req.query.title;
+  var songImageUrl = req.query.url;
+  var songDuration = req.query.duration;
 
   // retrieve accountId and playlistId from DB with playlistHash
   db.retrievePlaylist(playlistHash)
@@ -71,7 +73,7 @@ app.get('/addSong', (req, res, err) => {
 
         var songId = songUri.split('spotify:track:')[1];
 
-        db.insertSongToPlaylist(playlistHash, songId, songTitle, songArtist)
+        db.insertSongToPlaylist(playlistHash, songId, songArtist, songTitle, songImageUrl, songDuration)
         .then((song) => {
           //console.log('song successfully inserted to database in /addSong:', song);
 
@@ -141,7 +143,7 @@ app.get('/tracks', (req, res) => {
     }
 
     tracks = parsedBody.tracks.items.map((track) => {
-      return {uri: track.uri, artist: track.artists[0].name, title: track.name};
+      return {uri: track.uri, artist: track.artists[0].name, title: track.name, url: track.album.images[0].url, duration: track.duration_ms};
     });
     res.status(200).send(tracks);
     return;
@@ -248,7 +250,7 @@ app.post('/play', (req, res) => {
       };
 
       request(options, (err, resp, body) => {
-        console.log('api call /play successful', body);
+        console.log('api call /play successful');
 
         res.sendStatus(201);
       });
