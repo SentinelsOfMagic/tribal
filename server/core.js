@@ -227,6 +227,7 @@ app.post('/play', (req, res) => {
     var accountId = playlistData.accountId;
     var playlistId = playlistData.playlistId;
     var firstSongId = playlistData.orderedSongs[0];
+    console.log('firstSongId:', firstSongId);
 
     // retrieve accessToken with accountId
     db.retrieveAccount(accountId)
@@ -234,36 +235,34 @@ app.post('/play', (req, res) => {
       var accessToken = accountData.accessToken;
       // var refreshToken = accountData.refreshToken; // not needed right now
 
-      db.retrieveSongWithSongIdForPlaylist(firstSongId, playlistHash)
+      db.retrieveSongForPlaylist(firstSongId, playlistHash)
       .then((songData) => {
-        var duration = songData.duration;
+        console.log(songData);
+        // call Spotify API
+        var options = {
+          url: 'https://api.spotify.com/v1/me/player/play',
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + accessToken
+          },
+          json: {
+            // linter doesn't like underscore in key, but is required by Spotify api
+            'context_uri': `spotify:user:${accountId}:playlist:${playlistId}`,
+            'offset': {
+              'position': 0
+            }
+          }
+        };
+
+        request(options, (err, resp, body) => {
+          console.log('api call /play successful');
+
+          res.status(201).send(songData);
+        });
       })
       .catch((err) => {
         console.log('error in retrieving song in /play:', err);
       });
-
-      // call Spotify API
-      var options = {
-        url: 'https://api.spotify.com/v1/me/player/play',
-        method: 'PUT',
-        headers: {
-          'Authorization': 'Bearer ' + accessToken
-        },
-        json: {
-          // linter doesn't like underscore in key, but is required by Spotify api
-          'context_uri': `spotify:user:${accountId}:playlist:${playlistId}`,
-          'offset': {
-            'position': 0
-          }
-        }
-      };
-
-      request(options, (err, resp, body) => {
-        console.log('api call /play successful');
-
-        res.sendStatus(201);
-      });
-
     })
     .catch((err) => {
       console.log('error occurred while retrieving accountData in /play:', err);

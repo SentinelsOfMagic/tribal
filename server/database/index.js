@@ -152,14 +152,6 @@ const retrieveSongForPlaylist = (_id, playlistHash) => {
   });
 };
 
-const retrieveSongWithSongIdForPlaylist = (songId, playlistHash) => {
-  return Song.find({playlistHash: playlistHash, songId: songId})
-  .catch((err) => {
-    console.log('error in retrieving song with songId:', err);
-  });
-};
-
-
 const inputSongUpvote = (playlistHash, songId) => {
 
   return Song.findOneAndUpdate({_id: songId}, {$inc: {upvotes: 1}}, {new: true})
@@ -253,7 +245,6 @@ module.exports.retrieveAllSongsForPlaylist = retrieveAllSongsForPlaylist;
 module.exports.inputSongUpvote = inputSongUpvote;
 module.exports.inputSongDownvote = inputSongDownvote;
 module.exports.retrieveSongForPlaylist = retrieveSongForPlaylist;
-module.exports.retrieveSongWithSongIdForPlaylist = retrieveSongWithSongIdForPlaylist;
 module.exports.updateSongOrderAfterVote = updateSongOrderAfterVote;
 module.exports.updateSongIndex = updateSongIndex;
 
