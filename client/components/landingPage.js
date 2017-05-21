@@ -62,6 +62,7 @@ angular.module('tribal')
       this.downvotes = res.downvotes;
     });
   };
+
   this.setPlaylistSongs = (songs) => {
     console.log('setPlaylistSongs: ', songs);
     this.songsFromPlaylist.push(songs);

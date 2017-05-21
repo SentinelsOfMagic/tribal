@@ -43,6 +43,9 @@ const tribalServer = function( $http ) {
     });
   };
 
+  this.registerVote = function(callback) {
+    socket.on('voted', callback);
+  };
   // get (new or existing) playlist from server
   this.getPlaylist = function(hash) {
     console.log('get playlist: ', hash);
