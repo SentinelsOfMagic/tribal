@@ -6,7 +6,7 @@ const tribalServer = function( $http ) {
     return $http.get( '/test' );
   };
 
-  this.addSong = (playlistHash, songUri, artist, title) => {
+  this.addSong = (playlistHash, songUri, artist, title, url, duration) => {
     console.log('addSong');
     socket.emit('add song', { _id: playlistHash, songArtist: artist, songTitle: title });
     return $http.get('/addSong', {
@@ -14,7 +14,9 @@ const tribalServer = function( $http ) {
         playlistHash: playlistHash,
         songUri: songUri,
         artist: artist,
-        title: title
+        title: title,
+        url: url,
+        duration: duration
       }
     });
   };

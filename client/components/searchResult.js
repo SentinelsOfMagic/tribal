@@ -6,7 +6,7 @@ const SearchResultController = function($location, tribalServer) {
     console.log('searchResult:', this.searchResult);
     console.log('playlistHash:', this.playlistHash);
 
-    tribalServer.addSong(this.playlistHash, this.searchResult.uri, this.searchResult.artist, this.searchResult.title);
+    tribalServer.addSong(this.playlistHash, this.searchResult.uri, this.searchResult.artist, this.searchResult.title, this.searchResult.url, this.searchResult.duration);
   };
 };
 
