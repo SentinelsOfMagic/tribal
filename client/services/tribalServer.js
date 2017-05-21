@@ -24,13 +24,14 @@ const tribalServer = function( $http ) {
     socket.on('song added', callback);
   };
 
-  this.insertVotes = function(vote, songId, hash, callback) {
-    socket.emit('voting', vote, songId, hash, callback);
+  this.insertVotes = function(vote, songId, hash, $index, callback) {
+    socket.emit('voting', vote, songId, hash, $index, callback);
     return $http.get('/inputVotes', {
       params: {
         vote: vote,
         songId: songId,
-        hash: hash
+        hash: hash,
+        index: $index
       }
     });
   };
@@ -43,6 +44,9 @@ const tribalServer = function( $http ) {
     });
   };
 
+  this.registerVote = function(callback) {
+    socket.on('voted', callback);
+  };
   // get (new or existing) playlist from server
   this.getPlaylist = function(hash) {
     console.log('get playlist: ', hash);

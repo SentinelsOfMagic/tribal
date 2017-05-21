@@ -9,13 +9,23 @@ angular.module('tribal')
 
   //   });
   // };
+
+  this.voteInputHandler = (upvotes, downvotes, index) => {
+    this.Upvotes = upvotes;
+    this.Downvotes = downvotes;
+    console.log('expecting upvotes and downvotes???', this.Upvotes, this.Downvotes);
+  };
+
+  tribalServer.registerVote(this.voteInputHandler);
 })
 
 .directive('voterTable', function() {
   return {
     scope: {
       songs: '<',
-      votingHandler: '<'
+      votingHandler: '<',
+      upvotes: '<',
+      downvotes: '<'
     },
     restrict: 'E',
     controller: 'voterTableController',

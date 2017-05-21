@@ -1,20 +1,22 @@
 <div>
 <table>
-  <tr ng-repeat="song in ctrl.songs" song="song">
+  <tr ng-repeat="song in ctrl.songs track by $index" song="song">
     <td width="200">
       <span>{{song.songTitle}}</span>
       <span class="song-artist">{{song.songArtist}}</span>
     </td>
     <td>
-      <button class="vote-button" song="song" type="submit" ng-model='upvote' upvotes="ctrl.upvotes" ng-click="ctrl.votingHandler('upvote', song._id)">
-        {{song.upvotes}} 👍
+      <button class="vote-button" song="song" type="submit" ng-model='upvote' upvotes="ctrl.upvotes" ng-click="ctrl.votingHandler('upvote', song._id, $index)">
+        {{ctrl.Upvotes[$index]}} 👍
       </button>
     </td>
     <td>
-      <button class="vote-button" downvotes="ctrl.downvotes" id="song.songId" type="submit" ng-model='downvote' ng-click="ctrl.votingHandler('downvote', song._id)" >
-        {{song.downvotes}} 👎
+      <button class="vote-button" downvotes="ctrl.downvotes" id="song.songId" type="submit" ng-model='downvote' ng-click="ctrl.fakeDownvotes" ng-click="ctrl.votingHandler('downvote', song._id, $index)" >
+        {{ctrl.Downvotes[$index]}} 👎
+
       </button>
     </td>
+
 </tr>
 </table>
 </div>
