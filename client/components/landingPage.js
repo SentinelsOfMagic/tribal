@@ -53,13 +53,14 @@ angular.module('tribal')
         console.log('trouble getting the songs in frontend', err);
       });
   }
-  this.votingHandler = (vote, songId) => {
-    tribalServer.insertVotes(vote, songId, this.playlistHash, (res) => {
+
+  this.votingHandler = (vote, songId, $index) => {
+    tribalServer.insertVotes(vote, songId, this.playlistHash, $index, (res) => {
       console.log('hash', this.playlistHash);
       console.log('upvotes', res.upvotes);
       console.log('downvotes', res.downvotes);
-      this.upvotes = res.upvotes;
-      this.downvotes = res.downvotes;
+      // this.upvotes = res.upvotes;
+      // this.downvotes = res.downvotes;
     });
   };
 

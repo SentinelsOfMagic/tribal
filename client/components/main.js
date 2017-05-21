@@ -22,7 +22,9 @@ angular.module('tribal')
       playlistUri: '<',
       clickTitle: '<',
       songs: '<',
-      votingHandler: '<'
+      votingHandler: '<',
+      upvotes: '<',
+      downvotes: '<'
     },
     restrict: 'E',
     controller: 'MainController',
