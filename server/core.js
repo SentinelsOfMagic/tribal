@@ -458,20 +458,15 @@ io.on( 'connection', function(client) {
     // console.log('upvotes', song.upvotes, 'downvotes', song.downvotes )
   });
 
-  client.on('add song', (uri) => {
-    console.log( 'Client adding song', uri );
-    // the playlistId is the name of a room that this socket is in
-    let playlistId;
-    for ( room in client.rooms ) {
-      // each socket is also in a room matching its own ID, so let's filter that out
-      if ( room !== client.id ) {
-        playlistId = room;
+  client.on('add song', obj => {
+    obj.upvotes = 0;
+    obj.downvotes = 0;
+    console.log('Client adding song', obj);
+    for (room in client.rooms) {
+      if (room !== client.id) {
+        io.in(room).emit('song added', obj);
       }
     }
-    console.log( '  for playlist', playlistId );
-    db.insertSong(playlistId, {uri: uri});
-    // transmit the confirmation to ALL clients working with this playlist
-    io.in(playlistId).emit('song added', uri);
   });
 
   client.on('playlist', function(playlistHash) {
