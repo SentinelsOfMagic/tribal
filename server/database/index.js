@@ -18,21 +18,35 @@ const insertAccount = (accountId, accessToken, refreshToken) => {
     {accountId: accountId},
     {accessToken: accessToken, refreshToken: refreshToken},
     {upsert: true, new: true});
-
-  // return newAccount.save()
-  // .then((account) => {
-  //   console.log('new account successfully saved to db:', account);
-  //   return account;
-  // })
-  // .catch((err) => {
-  //   console.log('error occurred while saving new account to db:', err);
-  // });
 };
 
 const retrieveAccount = (accountId) => {
   return Account.findOne({accountId: accountId});
 };
 
+let refreshTokens = () => {
+  console.log('refreshing tokens!');
+  Account.find().then((accounts) => {
+    return Promise.all(accounts.map((account) => {
+      return Promise.all([account._id, Spotify.refreshAccessToken(account.accessToken, account.refreshToken)]);
+    }));
+  })
+  .then((pairs) => {
+    return Account.collection.bulkWrite(pairs.map((pair) => {
+      return {
+        'updateOne': {
+          'filter': {'_id': pair[0]},
+          'update': {'accessToken': pair[1].body['access_token']}
+        }};
+    }));
+  })
+  .catch((err) => {
+    console.log('error refreshing tokens', err);
+  });
+
+};
+
+setInterval(refreshTokens, 1500000);
 
 // Playlists
 const PlaylistSchema = mongoose.Schema({
@@ -99,7 +113,6 @@ const SongSchema = mongoose.Schema({
   songArtist: String,
   upvotes: Number,
   downvotes: Number,
-  //net: Number,
   index: Number,
   playlistHash: String
 });
@@ -118,7 +131,6 @@ const insertSongToPlaylist = (playlistHash, songId, songTitle, songArtist) => {
     songArtist: songArtist,
     upvotes: 0,
     downvotes: 0,
-    // net: 0,
     index: 0
   });
 
@@ -200,12 +212,11 @@ const updateSongOrderAfterVote = (songEntry, direction) => {
       Playlist.findOneAndUpdate({_id: movedSong.playlistHash}, {orderedSongs: orderedSongs})
     ]);
   })
-  .then(([newIndex, updatedSongEntry, oldPlaylistEntry]) => {
-    console.log('PLAYLIST: ', oldPlaylistEntry);
-    return Promise.all([newIndex, updatedSongEntry, retrieveAccount(oldPlaylistEntry.accountId), oldPlaylistEntry.playlistId]);
+  .then(([newIndex, oldSongEntry, oldPlaylistEntry]) => {
+    return Promise.all([newIndex, oldSongEntry, retrieveAccount(oldPlaylistEntry.accountId), oldPlaylistEntry.playlistId]);
   })
-  .then(([newIndex, updatedSongEntry, accountEntry, playlistId]) => {
-    return Spotify.reorderPlaylist(accountEntry.accessToken, accountEntry.accountId, playlistId, updatedSongEntry.index, newIndex);
+  .then(([newIndex, oldSongEntry, accountEntry, playlistId]) => {
+    return Spotify.reorderPlaylist(accountEntry.accessToken, accountEntry.accountId, playlistId, oldSongEntry.index, newIndex);
   })
   .catch((err) => {
     console.log(err);
@@ -216,50 +227,6 @@ const updateSongOrderAfterVote = (songEntry, direction) => {
 const updateSongIndex = (songId, index) => {
   return Song.findOneAndUpdate({_id: songId}, {index: index});
 };
-
-
-// // OLD STUFF
-
-// const OldPlayListSchema = mongoose.Schema({
-//   name: {
-//     type: String,
-//   },
-//   songs: [{
-//     uri: String
-//   }]
-// });
-
-// const OldPlayList = mongoose.model('OldPlayList', OldPlayListSchema);
-
-// // getAllPlayLists retrieves all playlists
-// const getAllPlaylists = function() {
-//   return OldPlayList.find({});
-// };
-
-// // getSinglePlayList retrieves a single PlayList associated with the given id or name
-// // returns promise, resolves with playlist document
-// const getSinglePlaylist = function( idOrName ) {
-//   if ( /^[0-9a-f]{24}$/.test(idOrName) ) {
-//     return OldPlayList.findById( idOrName );
-//   } else {
-//     return OldPlayList.findOne({ name: idOrName });
-//   }
-// };
-
-// // insertSong inserts a song(s) into the db
-// const insertSong = function(id, song) {
-//   return getSinglePlaylist( id )
-//     .then(playlist => {
-//       playlist.songs.push(song);
-//       return playlist.save();
-//     });
-// };
-
-// // create a new playlist, 'name', populated with no songs
-// // return promise, resolves with new document
-// const createPlaylist = function( name ) {
-//   return OldPlayList.create({ name: name });
-// };
 
 module.exports.mongoose = mongoose;
 module.exports.insertAccount = insertAccount;
@@ -279,8 +246,3 @@ module.exports.updateSongOrderAfterVote = updateSongOrderAfterVote;
 module.exports.updateSongIndex = updateSongIndex;
 
 
-// old exports
-// module.exports.getAllPlaylists = getAllPlaylists;
-// module.exports.getSinglePlaylist = getSinglePlaylist;
-// module.exports.insertSong = insertSong;
-// module.exports.createPlaylist = createPlaylist;
