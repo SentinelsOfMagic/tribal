@@ -21,6 +21,13 @@ let reorderPlaylist = (accessToken, ...args) => {
   return Spotify.reorderTracksInPlaylist(...args);
 };
 
+let refreshAccessToken = (accessToken, refreshToken) => {
+  Spotify.setAccessToken(accessToken);
+  Spotify.setRefreshToken(refreshToken);
+  return Spotify.refreshAccessToken();
+};
+
 module.exports.createPlaylist = createPlaylist;
 module.exports.addSongToPlaylist = addSongToPlaylist;
 module.exports.reorderPlaylist = reorderPlaylist;
+module.exports.refreshAccessToken = refreshAccessToken;

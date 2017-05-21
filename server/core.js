@@ -41,7 +41,6 @@ app.use(express.static(`${__dirname}/../node_modules`));
 // Spotify login routes
 app.get('/login', Login.login);
 app.get('/callback', Login.callback);
-app.get('/refresh_token', Login.refreshToken);
 
 // Add song to Spotify playlist
 app.get('/addSong', (req, res, err) => {
