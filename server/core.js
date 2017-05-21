@@ -454,16 +454,17 @@ io.on( 'connection', function(client) {
           upvotes.push(data[i].upvotes);
           downvotes.push(data[i].downvotes);
           callback({ upvotes: upvotes, downvotes: downvotes });
-          for (room in client.rooms) {
-            console.log('vote room: ', room);
-            // each socket is also in a room matching its own ID, so let's filter that out
-            // if ( room !== client.id ) {
-            voteId = room;
-            console.log('vote id: ', voteId);
-            console.log('can i see the upvotes here?', upvotes);
-            console.log('can i see the downvotes here?', downvotes);
+        }
+        for (room in client.rooms) {
+          console.log('vote room: ', room);
+          // each socket is also in a room matching its own ID, so let's filter that out
+          // if ( room !== client.id ) {
+          voteId = room;
+          console.log('vote id: ', voteId);
+          console.log('can i see the upvotes here?', upvotes);
+          console.log('can i see the downvotes here?', downvotes);
+          if (room !== client.id ) {
             io.in(voteId).emit('voted', upvotes, downvotes, $index);
-            // }
           }
         }
       })

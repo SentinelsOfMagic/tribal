@@ -9,6 +9,7 @@ angular.module('tribal')
 
   //   });
   // };
+
   this.voteInputHandler = (upvotes, downvotes, index) => {
     this.Upvotes = upvotes;
     this.Downvotes = downvotes;
