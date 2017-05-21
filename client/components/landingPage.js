@@ -53,7 +53,6 @@ angular.module('tribal')
         console.log('trouble getting the songs in frontend', err);
       });
   }
-
   this.votingHandler = (vote, songId) => {
     tribalServer.insertVotes(vote, songId, this.playlistHash, (res) => {
       console.log('hash', this.playlistHash);
@@ -61,11 +60,14 @@ angular.module('tribal')
       console.log('downvotes', res.downvotes);
       this.upvotes = res.upvotes;
       this.downvotes = res.downvotes;
-
     });
   };
-
-
+  this.setPlaylistSongs = (songs) => {
+    console.log('setPlaylistSongs: ', songs);
+    this.songsFromPlaylist.push(songs);
+    console.log('songsFromPlaylist: ', this.songsFromPlaylist);
+  };
+  tribalServer.updatePlaylistSongs(this.setPlaylistSongs);
 })
 
 .directive('landingPage', function() {

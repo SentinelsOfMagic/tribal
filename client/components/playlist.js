@@ -9,8 +9,6 @@ angular.module('tribal')
       this.playing = res.data.playing;
     })
     .catch(err => console.log('Error in getting playlist'));
-  // this.partying = false;
-  // this.playing = true;
   tribalServer.getCurrentSong(this.playlistHash)
     .then(res => {
       console.log('get currentSong success');
