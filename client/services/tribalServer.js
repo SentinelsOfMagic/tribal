@@ -7,6 +7,8 @@ const tribalServer = function( $http ) {
   };
 
   this.addSong = (playlistHash, songUri, artist, title) => {
+    console.log('addSong');
+    socket.emit('add song', { _id: playlistHash, songArtist: artist, songTitle: title });
     return $http.get('/addSong', {
       params: {
         playlistHash: playlistHash,
@@ -15,6 +17,11 @@ const tribalServer = function( $http ) {
         title: title
       }
     });
+  };
+
+  this.updatePlaylistSongs = (callback) => {
+    console.log('updatePlaylistSongs: ', callback);
+    socket.on('song added', callback);
   };
 
   this.insertVotes = function(vote, songId, hash, callback) {
@@ -49,7 +56,7 @@ const tribalServer = function( $http ) {
   // };
 
   this.registerSongAddedHandler = function(callback) {
-    socket.on( 'song added', callback );
+    socket.on('song added', callback);
   };
 
   this.spotifySearch = function(trackName) {
