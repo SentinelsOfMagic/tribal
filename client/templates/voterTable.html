@@ -11,8 +11,9 @@
       </button>
     </td>
     <td>
-      <button class="vote-button" downvotes="ctrl.downvotes" id="song.songId" type="submit" ng-model='downvote' ng-click="ctrl.votingHandler('downvote', song._id, $index)" >
+      <button class="vote-button" downvotes="ctrl.downvotes" id="song.songId" type="submit" ng-model='downvote' ng-click="ctrl.fakeDownvotes" ng-click="ctrl.votingHandler('downvote', song._id, $index)" >
         {{ctrl.Downvotes[$index]}} 👎
+
       </button>
     </td>
 

@@ -59,8 +59,8 @@ angular.module('tribal')
       console.log('hash', this.playlistHash);
       console.log('upvotes', res.upvotes);
       console.log('downvotes', res.downvotes);
-      // this.upvotes = res.upvotes;
-      // this.downvotes = res.downvotes;
+      this.upvotes = res.upvotes;
+      this.downvotes = res.downvotes;
     });
   };
 
