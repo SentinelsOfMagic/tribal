@@ -484,7 +484,7 @@ io.on( 'connection', function(client) {
         console.log('songs from playlist: ', data);
         for (room in client.rooms) {
           if (room !== client.id ) {
-            io.in(room).emit('reordered', data.sort((a, b) => a.index - b.index));
+            io.in(room).emit('reordered', data.filter(song => song.played === false).sort((a, b) => a.index - b.index));
           }
         }
       })
