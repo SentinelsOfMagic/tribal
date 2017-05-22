@@ -26,8 +26,14 @@ const tribalServer = function( $http ) {
     socket.on('song added', callback);
   };
 
+  this.registerReorder = (callback) => {
+    console.log('registerReorder: ', callback);
+    socket.on('reordered', callback);
+  };
+
   this.insertVotes = function(vote, songId, hash, $index, callback) {
     socket.emit('voting', vote, songId, hash, $index, callback);
+    socket.emit('reorder', hash);
     return $http.get('/inputVotes', {
       params: {
         vote: vote,
