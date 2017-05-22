@@ -107,6 +107,11 @@ const tribalServer = function( $http ) {
 
   this.songEnded = () => {
     socket.emit('songEnded');
+    socket.emit('removeLastPlayed');
+  };
+
+  this.playlistEnded = () => {
+    socket.emit('playlistEnded');
   };
 
   this.updateCurrentSong = (playlistHash, currentSongIndex) => {
@@ -117,6 +122,11 @@ const tribalServer = function( $http ) {
         currentSongIndex: currentSongIndex
       }
     });
+  };
+
+  this.removeLastPlayed = (callback) => {
+    console.log('removeLastPlayed: ', callback);
+    socket.on('remove last song', callback);
   };
 
   this.registerStartParty = function(callback) {
@@ -137,6 +147,11 @@ const tribalServer = function( $http ) {
   this.registerCurrentSong = (callback) => {
     console.log('registerCurrentSong:', callback);
     socket.on('currentSong', callback);
+  };
+
+  this.registerRestartPlaylist = (callback) => {
+    console.log('registerRestartPlaylist:', callback);
+    socket.on('restart playlist', callback);
   };
 
   // this.getCurrentSong = function(playlistHash, currentSongIndex) {
