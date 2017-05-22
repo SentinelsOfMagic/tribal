@@ -30,6 +30,7 @@ const PlaylistController = function($location, tribalServer, $scope) {
       this.currentSong = res.data[0];
       this.duration = res.data[0].duration;
       this.playTimer(this.duration);
+      tribalServer.emitStartParty();
     });
   };
 
@@ -54,6 +55,12 @@ const PlaylistController = function($location, tribalServer, $scope) {
     this.playing = true;
     console.log('partying: ', this.partying);
     console.log('playing: ', this.playing);
+
+    tribalServer.startParty(this.playlistHash, currentSongIndex)
+    .then((res) => {
+      this.currentSong = res.data[0];
+    });
+
     $scope.$apply();
   };
 
@@ -83,7 +90,7 @@ const PlaylistController = function($location, tribalServer, $scope) {
       if (current >= end) {
         clearInterval(timer);
         console.log('song ended');
-        tribalServer.songEnded();
+        this.updateCurrentSong();
       }
     }, 1000);
   };
@@ -91,13 +98,14 @@ const PlaylistController = function($location, tribalServer, $scope) {
   this.updateCurrentSong = () => {
     console.log('updating currentSong');
     currentSongIndex++;
+    tribalServer.songEnded();
 
     tribalServer.updateCurrentSong(this.playlistHash, currentSongIndex)
     .then((res) => {
       // update this.currentSong
       this.currentSong = res.data[0];
 
-      if (res.data[0]) {
+      if (res.data.length > 0) {
         // update timer variables
         this.duration = res.data[0].duration;
         elapsedTime = 0;
@@ -111,19 +119,23 @@ const PlaylistController = function($location, tribalServer, $scope) {
         this.playing = false;
         clearInterval(timer);
       }
-
-      // TODO: fire socket event to update vote table
     });
   };
 
   this.handleCurrentSong = () => {
     console.log('handleCurrentSong called!!');
+    // currentSongIndex++;
+
+    tribalServer.updateCurrentSong(this.playlistHash, currentSongIndex)
+    .then((res) => {
+      this.currentSong = res.data[0];
+    });
   };
 
   tribalServer.registerStartParty(this.handleStartParty);
   tribalServer.registerPlay(this.handlePlay);
   tribalServer.registerPause(this.handlePause);
-  tribalServer.registerCurrentSong(this.updateCurrentSong);
+  tribalServer.registerCurrentSong(this.handleCurrentSong);
 };
 
 const Playlist = function() {
