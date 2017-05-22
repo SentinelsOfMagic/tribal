@@ -22,7 +22,7 @@ const LandingPageCtrl = function($location, tribalServer, $scope) {
         $location.search('playlist', hash);
         tribalServer.grabSongsFromPlaylist(hash)
           .then(res => {
-            this.songsFromPlaylist = res.data.sort((a, b) => a.index - b.index);
+            this.songsFromPlaylist = res.data.filter(song => song.played === false).sort((a, b) => a.index - b.index);
           })
           .catch(err => {
             console.log('trouble getting the songs in frontend', err);
@@ -45,7 +45,7 @@ const LandingPageCtrl = function($location, tribalServer, $scope) {
     this.submitPlaylist(this.playlistHash);
     tribalServer.grabSongsFromPlaylist(this.playlistHash)
       .then(res => {
-        this.songsFromPlaylist = res.data.sort((a, b) => a.index - b.index);
+        this.songsFromPlaylist = res.data.filter(song => song.played === false).sort((a, b) => a.index - b.index);
       })
       .catch(err => {
         console.log('trouble getting the songs in frontend', err);
