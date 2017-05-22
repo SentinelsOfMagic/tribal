@@ -477,6 +477,20 @@ io.on( 'connection', function(client) {
     }
   });
 
+  client.on('reorder', (hash) => {
+    console.log('ON REORDER: ', hash);
+    db.retrieveAllSongsForPlaylist(hash)
+      .then(data => {
+        console.log('songs from playlist: ', data);
+        for (room in client.rooms) {
+          if (room !== client.id ) {
+            io.in(room).emit('reordered', data.filter(song => song.played === false).sort((a, b) => a.index - b.index));
+          }
+        }
+      })
+      .catch(err => console.log('Error in retrieving reordered playlist: ', err));
+  });
+
   client.on('voting', function(vote, songId, hash, $index, callback) {
     //look in the database for song and then the upvotes/downvotes for that song
 
@@ -491,7 +505,6 @@ io.on( 'connection', function(client) {
           callback({ upvotes: upvotes, downvotes: downvotes });
         }
         for (room in client.rooms) {
-          console.log('vote room: ', room);
           // each socket is also in a room matching its own ID, so let's filter that out
           // if ( room !== client.id ) {
           voteId = room;
@@ -507,33 +520,8 @@ io.on( 'connection', function(client) {
         console.log('error in retrieving all songs for playlist', error);
       });
 
-
-    // db.retrieveSongForPlaylist(songId, hash, callback)
-    //   .then((data)=>{
-    //     console.log('expect one song object', data);
-    //     callback({ upvotes: data[0].upvotes, downvotes: data[0].downvotes });
-    //     var upvotes = data[0].upvotes;
-    //     var downvotes = data[0].downvotes;
-    //     for (room in client.rooms) {
-    //       console.log('vote room: ', room);
-    //       // each socket is also in a room matching its own ID, so let's filter that out
-    //       // if ( room !== client.id ) {
-    //       voteId = room;
-    //       console.log('vote id: ', voteId);
-    //       console.log('can i see the upvotes here?', upvotes);
-    //       io.in(voteId).emit('voted', upvotes, downvotes);
-    //       // }
-    //     }
-    //   })
-    //   .catch((error)=>{
-    //     console.log('error in retrieving song', error);
-    //   });
-
-    console.log('vote client: ', client);
     console.log('vote client rooms: ', client.rooms);
     console.log('vote client id: ', client.id);
-
-    // console.log('upvotes', song.upvotes, 'downvotes', song.downvotes )
   });
 
   client.on('add song', obj => {

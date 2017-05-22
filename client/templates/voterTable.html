@@ -7,13 +7,12 @@
     </td>
     <td>
       <button class="vote-button" song="song" type="submit" ng-model='upvote' upvotes="ctrl.upvotes" ng-click="ctrl.votingHandler('upvote', song._id, $index)">
-        {{ctrl.Upvotes[$index]}} 👍
+        {{song.upvotes}} 👍
       </button>
     </td>
     <td>
       <button class="vote-button" downvotes="ctrl.downvotes" id="song.songId" type="submit" ng-model='downvote' ng-click="ctrl.votingHandler('downvote', song._id, $index)" >
-        {{ctrl.Downvotes[$index]}} 👎
-
+        {{song.downvotes}} 👎
       </button>
     </td>
 

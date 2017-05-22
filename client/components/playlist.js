@@ -1,6 +1,4 @@
-angular.module('tribal')
-
-.controller('PlaylistController', function($location, tribalServer) {
+const PlaylistController = function($location, tribalServer, $scope) {
   this.duration;
   var timer;
   var elapsedTime = 0;
@@ -56,6 +54,7 @@ angular.module('tribal')
     this.playing = true;
     console.log('partying: ', this.partying);
     console.log('playing: ', this.playing);
+    $scope.$apply();
   };
 
   this.handlePlay = () => {
@@ -63,12 +62,14 @@ angular.module('tribal')
     this.playing = true;
     this.partying = true;
     console.log('playing: ', this.playing);
+    $scope.$apply();
   };
 
   this.handlePause = () => {
     console.log('handlePause');
     this.playing = false;
     console.log('playing: ', this.playing);
+    $scope.$apply();
   };
 
   this.playTimer = (duration) => {
@@ -116,19 +117,20 @@ angular.module('tribal')
   tribalServer.registerStartParty(this.handleStartParty);
   tribalServer.registerPlay(this.handlePlay);
   tribalServer.registerPause(this.handlePause);
-})
+};
 
-.directive('playlist', function() {
+const Playlist = function() {
   return {
     scope: {
       playlistUri: '<',
       songs: '<'
     },
     restrict: 'E',
-    controller: 'PlaylistController',
+    controller: PlaylistController,
     controllerAs: 'ctrl',
     bindToController: true,
     templateUrl: '/templates/playlist.html'
   };
-});
+};
 
+angular.module('tribal').directive('playlist', Playlist);
