@@ -70,13 +70,22 @@ const LandingPageCtrl = function($location, tribalServer, $scope) {
     console.log('songsFromPlaylist: ', this.songsFromPlaylist);
     $scope.$apply();
   };
+
+  this.removeLastPlayed = () => {
+    this.songsFromPlaylist.shift();
+    console.log('songsFromPlaylist: ', this.songsFromPlaylist);
+    $scope.$apply();
+  };
+
   this.reorderHandler = (songs) => {
     console.log('reorderHandler: ', songs);
     this.songsFromPlaylist = songs;
     console.log('reordered songsFromPlaylist: ', this.songsFromPlaylist);
     $scope.$apply();
   };
+
   tribalServer.updatePlaylistSongs(this.setPlaylistSongs);
+  tribalServer.removeLastPlayed(this.removeLastPlayed);
   tribalServer.registerReorder(this.reorderHandler);
 };
 

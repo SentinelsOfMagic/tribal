@@ -503,6 +503,18 @@ io.on( 'connection', function(client) {
     }
   });
 
+  client.on('removeLastPlayed', () => {
+    console.log('removeLastPlayed client rooms: ', client.rooms);
+    console.log('removeLastPlayed client id: ', client.id);
+    for (room in client.rooms) {
+      console.log('removeLastPlayed room: ', room);
+      if (room !== client.id) {
+        console.log('removeLastPlayed id: ', room);
+        io.in(room).emit('remove last song');
+      }
+    }
+  });
+
   client.on('voting', function(vote, songId, hash, $index, callback) {
     //look in the database for song and then the upvotes/downvotes for that song
 

@@ -107,6 +107,7 @@ const tribalServer = function( $http ) {
 
   this.songEnded = () => {
     socket.emit('songEnded');
+    socket.emit('removeLastPlayed');
   };
 
   this.updateCurrentSong = (playlistHash, currentSongIndex) => {
@@ -117,6 +118,11 @@ const tribalServer = function( $http ) {
         currentSongIndex: currentSongIndex
       }
     });
+  };
+
+  this.removeLastPlayed = (callback) => {
+    console.log('removeLastPlayed: ', callback);
+    socket.on('remove last song', callback);
   };
 
   this.registerStartParty = function(callback) {
