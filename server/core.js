@@ -477,6 +477,7 @@ io.on( 'connection', function(client) {
     }
   });
 
+<<<<<<< HEAD
   client.on('reorder', (hash) => {
     console.log('ON REORDER: ', hash);
     db.retrieveAllSongsForPlaylist(hash)
@@ -491,6 +492,21 @@ io.on( 'connection', function(client) {
       .catch(err => console.log('Error in retrieving reordered playlist: ', err));
   });
 
+||||||| merged common ancestors
+=======
+  client.on('songEnded', () => {
+    console.log('songEnded client rooms: ', client.rooms);
+    console.log('songEnded client id: ', client.id);
+    for (room in client.rooms) {
+      console.log('songEnded room: ', room);
+      if (room !== client.id) {
+        console.log('songEnded id: ', room);
+        io.in(room).emit('currentSong');
+      }
+    }
+  });
+
+>>>>>>> Add sockets to render new album/title/artist when song ends
   client.on('voting', function(vote, songId, hash, $index, callback) {
     //look in the database for song and then the upvotes/downvotes for that song
 

@@ -83,7 +83,7 @@ const PlaylistController = function($location, tribalServer, $scope) {
       if (current >= end) {
         clearInterval(timer);
         console.log('song ended');
-        this.updateCurrentSong();
+        tribalServer.songEnded();
       }
     }, 1000);
   };
@@ -114,9 +114,14 @@ const PlaylistController = function($location, tribalServer, $scope) {
     });
   };
 
+  this.handleCurrentSong = () => {
+    console.log('handleCurrentSong called!!');
+  };
+
   tribalServer.registerStartParty(this.handleStartParty);
   tribalServer.registerPlay(this.handlePlay);
   tribalServer.registerPause(this.handlePause);
+  tribalServer.registerCurrentSong(this.updateCurrentSong);
 };
 
 const Playlist = function() {
