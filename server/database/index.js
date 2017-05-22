@@ -36,7 +36,7 @@ let refreshTokens = () => {
       return {
         'updateOne': {
           'filter': {'_id': pair[0]},
-          'update': {'accessToken': pair[1].body['access_token']}
+          'update': {'$set': {'accessToken': pair[1].body['access_token']}}
         }};
     }));
   })
