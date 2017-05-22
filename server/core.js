@@ -143,7 +143,7 @@ app.get('/tracks', (req, res) => {
     }
 
     tracks = parsedBody.tracks.items.map((track) => {
-      return {uri: track.uri, artist: track.artists[0].name, title: track.name, url: track.album.images[0].url, duration: track.duration_ms};
+      return {uri: track.uri, artist: track.artists[0].name, title: track.name, url: track.album.images[1].url, duration: track.duration_ms};
     });
     res.status(200).send(tracks);
     return;
@@ -369,48 +369,58 @@ app.post('/pause', (req, res) => {
   });
 });
 
-app.post('/currentSong', (req, res) => {
-  var playlistHash = req.body.playlist;
+// app.post('/currentSong', (req, res) => {
+//   var playlistHash = req.body.playlist;
+//   var currentSongIndex = req.body.currentSongIndex;
 
-  db.retrievePlaylist(playlistHash)
-  .then((playlistData) => {
+//   db.retrievePlaylist(playlistHash)
+//   .then((playlistData) => {
 
-    var accountId = playlistData.accountId;
-    var playlistId = playlistData.playlistId;
+//     var accountId = playlistData.accountId;
+//     var playlistId = playlistData.playlistId;
+//     var currentSong = playlistData.orderedSongs[currentSongIndex];
 
-    db.retrieveAccount(accountId)
-    .then((accountData) => {
-      var accessToken = accountData.accessToken;
-      console.log('accessToken: ', accessToken);
+//     db.retrieveSongForPlaylist(currentSong, playlistHash)
+//     .then((songData) => {
+//       console.log('SONGDATA:', songData);
+//     })
+//     .catch((err) => {
+//       console.log('error while in db.retrieveSongForPlaylist in /currentSong:', err);
+//     });
 
-      var options = {
-        url: 'https://api.spotify.com/v1/me/player/currently-playing',
-        method: 'GET',
-        headers: {
-          'Authorization': 'Bearer ' + accessToken
-        }
-      };
+//   //   db.retrieveAccount(accountId)
+//   //   .then((accountData) => {
+//   //     var accessToken = accountData.accessToken;
+//   //     console.log('accessToken: ', accessToken);
 
-      request(options, (err, resp, body) => {
-        if (err) {
-          console.log('api call /currentSong unsuccessful: ', err);
-          res.sendStatus(404);
-        } else {
-          console.log('api call /currentSong successful');
-          res.send(body);
-        }
-      });
-    })
-    .catch((err) => {
-      console.log('error occurred while retrieving accountData in /currentSong:', err);
-      res.sendStatus(404);
-    });
-  })
-  .catch((err) => {
-    console.log('Unable to retrieve playlist data in /currentSong: ', err);
-    res.sendStatus(404);
-  });
-});
+//   //     var options = {
+//   //       url: 'https://api.spotify.com/v1/me/player/currently-playing',
+//   //       method: 'GET',
+//   //       headers: {
+//   //         'Authorization': 'Bearer ' + accessToken
+//   //       }
+//   //     };
+
+//   //     request(options, (err, resp, body) => {
+//   //       if (err) {
+//   //         console.log('api call /currentSong unsuccessful: ', err);
+//   //         res.sendStatus(404);
+//   //       } else {
+//   //         console.log('api call /currentSong successful');
+//   //         res.send(body);
+//   //       }
+//   //     });
+//   //   })
+//   //   .catch((err) => {
+//   //     console.log('error occurred while retrieving accountData in /currentSong:', err);
+//   //     res.sendStatus(404);
+//   //   });
+//   // })
+//   // .catch((err) => {
+//   //   console.log('Unable to retrieve playlist data in /currentSong: ', err);
+//   //   res.sendStatus(404);
+//   });
+// });
 
 // socket.io framework
 io.on( 'connection', function(client) {
