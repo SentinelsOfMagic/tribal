@@ -243,7 +243,7 @@ app.post('/play', (req, res) => {
           url: 'https://api.spotify.com/v1/me/player/play',
           method: 'PUT',
           headers: {
-            'Authorization': 'Bearer ' + 'BQAkwNfrJGX3Ph38S827sfsO6Zg1cuYi90bPznlv1y_T1KsGfNxWuBPWsiYHxS5j_7SmbvHP-uZTD2fXGaVkkAL5mxeNzozC40XImtvhvYQjiwy2kmkPGrrJGV_FdhOD7G9okJmq3EiY48drfeEsWIhFnODVAFG8HZWWEc_bbjJsotN4VM3uevW4qUPa8Add1V5fmPbbYiuo__0deSLPPNQ5LPQS9urw5nKXoYFdYtMS_bdXnCsQL4yBlc9yGYjQl8jgvU55_IPy1ROVaQZqoJ7UEJias7j2f_zAAz8RG0ZYr5ezxwIJVERGSiaawx9dG0jE0w'
+            'Authorization': 'Bearer ' + accessToken
           },
           json: {
             // linter doesn't like underscore in key, but is required by Spotify api
@@ -301,7 +301,7 @@ app.post('/resume', (req, res) => {
         url: 'https://api.spotify.com/v1/me/player/play',
         method: 'PUT',
         headers: {
-          'Authorization': 'Bearer ' + 'BQAkwNfrJGX3Ph38S827sfsO6Zg1cuYi90bPznlv1y_T1KsGfNxWuBPWsiYHxS5j_7SmbvHP-uZTD2fXGaVkkAL5mxeNzozC40XImtvhvYQjiwy2kmkPGrrJGV_FdhOD7G9okJmq3EiY48drfeEsWIhFnODVAFG8HZWWEc_bbjJsotN4VM3uevW4qUPa8Add1V5fmPbbYiuo__0deSLPPNQ5LPQS9urw5nKXoYFdYtMS_bdXnCsQL4yBlc9yGYjQl8jgvU55_IPy1ROVaQZqoJ7UEJias7j2f_zAAz8RG0ZYr5ezxwIJVERGSiaawx9dG0jE0w'
+          'Authorization': 'Bearer ' + accessToken
         }
       };
 
@@ -349,7 +349,7 @@ app.post('/pause', (req, res) => {
         url: 'https://api.spotify.com/v1/me/player/pause',
         method: 'PUT',
         headers: {
-          'Authorization': 'Bearer ' + 'BQAkwNfrJGX3Ph38S827sfsO6Zg1cuYi90bPznlv1y_T1KsGfNxWuBPWsiYHxS5j_7SmbvHP-uZTD2fXGaVkkAL5mxeNzozC40XImtvhvYQjiwy2kmkPGrrJGV_FdhOD7G9okJmq3EiY48drfeEsWIhFnODVAFG8HZWWEc_bbjJsotN4VM3uevW4qUPa8Add1V5fmPbbYiuo__0deSLPPNQ5LPQS9urw5nKXoYFdYtMS_bdXnCsQL4yBlc9yGYjQl8jgvU55_IPy1ROVaQZqoJ7UEJias7j2f_zAAz8RG0ZYr5ezxwIJVERGSiaawx9dG0jE0w'
+          'Authorization': 'Bearer ' + accessToken
         }
       };
 
@@ -386,7 +386,6 @@ app.post('/pause', (req, res) => {
 //       console.log('error while in db.retrieveSongForPlaylist in /nextSong:', err);
 //     });
 // });
-
 
 app.get('/currentSong', (req, res) => {
   var playlistHash = req.query.playlist;
