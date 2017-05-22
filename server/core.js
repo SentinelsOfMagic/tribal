@@ -134,7 +134,7 @@ app.get('/tracks', (req, res) => {
 
   let tracks;
 
-  request(`https://api.spotify.com/v1/search?q=${query}&type=track`, (error, response, body) => {
+  request(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=10`, (error, response, body) => {
     const parsedBody = JSON.parse(body);
 
     if (parsedBody.tracks.items.length <= 0) {

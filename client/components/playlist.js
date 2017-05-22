@@ -26,6 +26,7 @@ angular.module('tribal')
 
   this.startParty = ($event) => {
     console.log('startParty');
+    currentSongIndex = 0;
     tribalServer.startParty(this.playlistHash, currentSongIndex)
     .then((res) => {
       this.currentSong = res.data[0];
@@ -95,10 +96,18 @@ angular.module('tribal')
       // update this.currentSong
       this.currentSong = res.data[0];
 
-      // update timer variables
-      this.duration = res.data[0].duration;
-      elapsedTime = 0;
-      this.playTimer(this.duration);
+      if (res.data[0]) {
+        // update timer variables
+        this.duration = res.data[0].duration;
+        elapsedTime = 0;
+        this.playTimer(this.duration);
+      } else {
+        console.log('playlist ended');
+        // playlist has gotten to the end
+        this.partying = false;
+        this.playing = false;
+        clearInterval(timer);
+      }
 
       // TODO: fire socket event to update vote table
     });
