@@ -167,6 +167,7 @@ app.get('/inputVotes', (req, res) => {
   if (req.query.vote === 'upvote') {
     db.inputSongUpvote(req.query.hash, req.query.songId)
     .then((songObject) => {
+      // emit
       return db.updateSongOrderAfterVote(songObject, -1);
     })
     .catch(err=> {
@@ -175,6 +176,7 @@ app.get('/inputVotes', (req, res) => {
   } else {
     db.inputSongDownvote(req.query.hash, req.query.songId)
     .then((songObject) => {
+      // emit
       return db.updateSongOrderAfterVote(songObject, 1);
     })
     .catch(err=> {
