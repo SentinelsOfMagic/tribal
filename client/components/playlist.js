@@ -103,8 +103,10 @@ const PlaylistController = function($location, tribalServer, $scope) {
         elapsedTime = 0;
         this.playTimer(this.duration);
       } else {
-        console.log('playlist ended');
         // playlist has gotten to the end
+        console.log('playlist ended');
+        tribalServer.playlistEnded();
+
         this.partying = false;
         this.playing = false;
         clearInterval(timer);

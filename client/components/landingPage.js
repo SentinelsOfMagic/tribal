@@ -84,8 +84,19 @@ const LandingPageCtrl = function($location, tribalServer, $scope) {
     $scope.$apply();
   };
 
+  this.restartPlaylist = () => {
+    tribalServer.grabSongsFromPlaylist(this.playlistHash)
+    .then(res => {
+      this.songsFromPlaylist = res.data.filter(song => song.played === false).sort((a, b) => a.index - b.index);
+    })
+    .catch(err => {
+      console.log('trouble getting the songs in frontend', err);
+    });
+  };
+
   tribalServer.updatePlaylistSongs(this.setPlaylistSongs);
   tribalServer.removeLastPlayed(this.removeLastPlayed);
+  tribalServer.registerRestartPlaylist(this.restartPlaylist);
   tribalServer.registerReorder(this.reorderHandler);
 };
 
