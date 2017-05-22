@@ -87,9 +87,12 @@ const tribalServer = function( $http ) {
     });
   };
 
+  this.emitStartParty = () => {
+    socket.emit('start');
+  };
+
   this.startParty = function(playlistHash, currentSongIndex) {
     console.log('tribalServer startParty: ', playlistHash);
-    socket.emit('start');
     return $http.post('/play', { playlist: playlistHash, currentSongIndex: currentSongIndex });
   };
 
