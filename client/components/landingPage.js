@@ -52,9 +52,10 @@ const LandingPageCtrl = function($location, tribalServer, $scope) {
       });
   }
 
-  this.votingHandler = (vote, songId, $index) => {
-    tribalServer.insertVotes(vote, songId, this.playlistHash, $index, (res) => {
-      console.log('hash', this.playlistHash);
+  this.votingHandler = (vote, songId, $index, hash) => {
+    console.log('votingHandler: ', hash);
+    tribalServer.insertVotes(vote, songId, hash, $index, (res) => {
+      console.log('hash', hash);
       console.log('upvotes', res.upvotes);
       console.log('downvotes', res.downvotes);
       console.log('index of button pressed', $index);
