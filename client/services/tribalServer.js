@@ -32,7 +32,7 @@ const tribalServer = function( $http ) {
   };
 
   this.insertVotes = function(vote, songId, hash, $index, callback) {
-    socket.emit('voting', vote, songId, hash, $index, callback);
+    // socket.emit('voting', vote, songId, hash, $index, callback);
     socket.emit('reorder', hash);
     return $http.get('/inputVotes', {
       params: {
