@@ -1,4 +1,6 @@
-const voterTableController = function(tribalServer, $scope) {
+const voterTableController = function(tribalServer, $scope, $location) {
+  this.playlistHash = $location.search().playlist;
+  console.log('playlist hash: ', this.playlistHash);
   this.voteInputHandler = (upvotes, downvotes, index) => {
     this.Upvotes = upvotes;
     this.Downvotes = downvotes;
@@ -18,7 +20,7 @@ const VoterTable = function() {
       downvotes: '<'
     },
     restrict: 'E',
-    controller: ['tribalServer', '$scope', voterTableController],
+    controller: ['tribalServer', '$scope', '$location', voterTableController],
     controllerAs: 'ctrl',
     bindToController: true,
     templateUrl: '/templates/voterTable.html'
