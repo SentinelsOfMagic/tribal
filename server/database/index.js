@@ -108,6 +108,7 @@ const insertSongToPlaylistOrderedSongs = (playlistHash, songId) => {
 
 // TODO: add image url
 const SongSchema = mongoose.Schema({
+  playlistHash: String,
   songId: String,
   songArtist: String,
   songTitle: String,
@@ -116,7 +117,7 @@ const SongSchema = mongoose.Schema({
   upvotes: Number,
   downvotes: Number,
   index: Number,
-  playlistHash: String
+  played: Boolean
 });
 
 SongSchema.virtual('net').get(function() {
@@ -135,7 +136,8 @@ const insertSongToPlaylist = (playlistHash, songId, songArtist, songTitle, songI
     duration: songDuration,
     upvotes: 0,
     downvotes: 0,
-    index: 0
+    index: 0,
+    played: false
   });
 
   return newSong.save();
