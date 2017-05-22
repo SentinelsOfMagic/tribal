@@ -178,12 +178,12 @@ const moveSong = (orderedSongs, movingSong, index, direction) => {
 
   return Song.findOne({_id: orderedSongs[index + direction]})
   .then((compareSong) => {
-    if (compareSong && movingSong.net > compareSong.net && direction === -1) {
+    if (compareSong && !compareSong.played && movingSong.net > compareSong.net && direction === -1) {
       orderedSongs[movingSong.index] = compareSong._id;
       movingSong.index--;
       orderedSongs[movingSong.index] = movingSong._id;
       return Song.findOneAndUpdate({_id: compareSong._id}, {$inc: {index: 1}});
-    } else if (compareSong && movingSong.net < compareSong.net && direction === 1) {
+    } else if (compareSong && !compareSong.played && movingSong.net < compareSong.net && direction === 1) {
       orderedSongs[movingSong.index] = compareSong._id;
       movingSong.index++;
       orderedSongs[movingSong.index] = movingSong._id;
