@@ -48,6 +48,8 @@ app.get('/addSong', (req, res, err) => {
   var songUri = req.query.songUri;
   var songArtist = req.query.artist;
   var songTitle = req.query.title;
+  var songImageUrl = req.query.url;
+  var songDuration = req.query.duration;
 
   // retrieve accountId and playlistId from DB with playlistHash
   db.retrievePlaylist(playlistHash)
@@ -71,7 +73,7 @@ app.get('/addSong', (req, res, err) => {
 
         var songId = songUri.split('spotify:track:')[1];
 
-        db.insertSongToPlaylist(playlistHash, songId, songTitle, songArtist)
+        db.insertSongToPlaylist(playlistHash, songId, songArtist, songTitle, songImageUrl, songDuration)
         .then((song) => {
           //console.log('song successfully inserted to database in /addSong:', song);
 
@@ -141,7 +143,7 @@ app.get('/tracks', (req, res) => {
     }
 
     tracks = parsedBody.tracks.items.map((track) => {
-      return {uri: track.uri, artist: track.artists[0].name, title: track.name};
+      return {uri: track.uri, artist: track.artists[0].name, title: track.name, url: track.album.images[0].url, duration: track.duration_ms};
     });
     res.status(200).send(tracks);
     return;
@@ -224,6 +226,8 @@ app.post('/play', (req, res) => {
     // console.log('retrieved playlistData successfully in /play:', playlistData);
     var accountId = playlistData.accountId;
     var playlistId = playlistData.playlistId;
+    var firstSongId = playlistData.orderedSongs[0];
+    console.log('firstSongId:', firstSongId);
 
     // retrieve accessToken with accountId
     db.retrieveAccount(accountId)
@@ -231,28 +235,34 @@ app.post('/play', (req, res) => {
       var accessToken = accountData.accessToken;
       // var refreshToken = accountData.refreshToken; // not needed right now
 
-      // call Spotify API
-      var options = {
-        url: 'https://api.spotify.com/v1/me/player/play',
-        method: 'PUT',
-        headers: {
-          'Authorization': 'Bearer ' + accessToken
-        },
-        json: {
-          // linter doesn't like underscore in key, but is required by Spotify api
-          'context_uri': `spotify:user:${accountId}:playlist:${playlistId}`,
-          'offset': {
-            'position': 0
+      db.retrieveSongForPlaylist(firstSongId, playlistHash)
+      .then((songData) => {
+        console.log(songData);
+        // call Spotify API
+        var options = {
+          url: 'https://api.spotify.com/v1/me/player/play',
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + accessToken
+          },
+          json: {
+            // linter doesn't like underscore in key, but is required by Spotify api
+            'context_uri': `spotify:user:${accountId}:playlist:${playlistId}`,
+            'offset': {
+              'position': 0
+            }
           }
-        }
-      };
+        };
 
-      request(options, (err, resp, body) => {
-        console.log('api call /play successful', body);
+        request(options, (err, resp, body) => {
+          console.log('api call /play successful');
 
-        res.sendStatus(201);
+          res.status(201).send(songData);
+        });
+      })
+      .catch((err) => {
+        console.log('error in retrieving song in /play:', err);
       });
-
     })
     .catch((err) => {
       console.log('error occurred while retrieving accountData in /play:', err);
