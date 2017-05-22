@@ -5,6 +5,7 @@ angular.module('tribal')
   var timer;
   var elapsedTime = 0;
   var timeLeft = 0;
+  var currentSongIndex = 0;
 
   this.playlistHash = $location.search().playlist;
 
@@ -16,17 +17,18 @@ angular.module('tribal')
     })
     .catch(err => console.log('Error in getting playlist'));
 
-  tribalServer.getCurrentSong(this.playlistHash)
-    .then(res => {
-      console.log('get currentSong success');
-      this.currentSong = res.data;
-    })
-    .catch(err => console.log('Error in setting currentSong'));
+  // tribalServer.getCurrentSong(this.playlistHash, currentSongIndex)
+  //   .then(res => {
+  //     console.log('get currentSong success');
+  //     this.currentSong = res.data;
+  //   })
+  //   .catch(err => console.log('Error in setting currentSong'));
 
   this.startParty = ($event) => {
     console.log('startParty');
-    tribalServer.startParty(this.playlistHash)
+    tribalServer.startParty(this.playlistHash, currentSongIndex)
     .then((res) => {
+      this.currentSong = res.data[0];
       this.duration = res.data[0].duration;
       this.playTimer(this.duration);
     });

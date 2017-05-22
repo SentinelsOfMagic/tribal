@@ -81,10 +81,10 @@ const tribalServer = function( $http ) {
     });
   };
 
-  this.startParty = function(playlistHash) {
+  this.startParty = function(playlistHash, currentSongIndex) {
     console.log('tribalServer startParty: ', playlistHash);
     socket.emit('start');
-    return $http.post('/play', { playlist: playlistHash });
+    return $http.post('/play', { playlist: playlistHash, currentSongIndex: currentSongIndex });
   };
 
   this.resumeSong = function(playlistHash) {
@@ -114,10 +114,10 @@ const tribalServer = function( $http ) {
     socket.on('paused', callback);
   };
 
-  this.getCurrentSong = function(playlistHash) {
-    console.log('getCurrentSong: ', playlistHash);
-    return $http.post('/currentSong', { playlist: playlistHash });
-  };
+  // this.getCurrentSong = function(playlistHash, currentSongIndex) {
+  //   console.log('getCurrentSong: ', playlistHash);
+  //   return $http.post('/currentSong', { playlist: playlistHash, currentSongIndex: currentSongIndex });
+  // };
 };
 
 angular.module('tribal').service('tribalServer', ['$http', tribalServer]);
