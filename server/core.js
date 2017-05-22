@@ -157,6 +157,7 @@ app.get('/grabSongsData', (req, res) => {
     })
     .catch(err => {
       console.log('trouble grabbing the data', err);
+      res.send('err');
     });
 });
 
