@@ -81,8 +81,27 @@ angular.module('tribal')
       if (current >= end) {
         clearInterval(timer);
         console.log('song ended');
+        this.updateCurrentSong();
       }
     }, 1000);
+  };
+
+  this.updateCurrentSong = () => {
+    console.log('updating currentSong');
+    currentSongIndex++;
+
+    tribalServer.updateCurrentSong(this.playlistHash, currentSongIndex)
+    .then((res) => {
+      // update this.currentSong
+      this.currentSong = res.data[0];
+
+      // update timer variables
+      this.duration = res.data[0].duration;
+      elapsedTime = 0;
+      this.playTimer(this.duration);
+
+      // TODO: fire socket event to update vote table
+    });
   };
 
   tribalServer.registerStartParty(this.handleStartParty);

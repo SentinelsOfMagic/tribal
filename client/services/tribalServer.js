@@ -99,6 +99,17 @@ const tribalServer = function( $http ) {
     return $http.post('/pause', { playlist: playlistHash });
   };
 
+  this.updateCurrentSong = (playlistHash, currentSongIndex) => {
+    console.log('tribalServer updateCurrentSong: ', playlistHash);
+    // TODO: emit socket event?
+    return $http.get('/currentSong', {
+      params: {
+        playlist: playlistHash,
+        currentSongIndex: currentSongIndex
+      }
+    });
+  };
+
   this.registerStartParty = function(callback) {
     console.log('registerStartParty: ', callback);
     socket.on('starting', callback);

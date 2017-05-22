@@ -369,58 +369,74 @@ app.post('/pause', (req, res) => {
   });
 });
 
-// app.post('/currentSong', (req, res) => {
+// app.get('/nextSong', (req, res) => {
 //   var playlistHash = req.body.playlist;
 //   var currentSongIndex = req.body.currentSongIndex;
 
 //   db.retrievePlaylist(playlistHash)
 //   .then((playlistData) => {
 
-//     var accountId = playlistData.accountId;
-//     var playlistId = playlistData.playlistId;
 //     var currentSong = playlistData.orderedSongs[currentSongIndex];
 
 //     db.retrieveSongForPlaylist(currentSong, playlistHash)
 //     .then((songData) => {
-//       console.log('SONGDATA:', songData);
+//       res.status(201).send(songData);
 //     })
 //     .catch((err) => {
-//       console.log('error while in db.retrieveSongForPlaylist in /currentSong:', err);
+//       console.log('error while in db.retrieveSongForPlaylist in /nextSong:', err);
 //     });
-
-//   //   db.retrieveAccount(accountId)
-//   //   .then((accountData) => {
-//   //     var accessToken = accountData.accessToken;
-//   //     console.log('accessToken: ', accessToken);
-
-//   //     var options = {
-//   //       url: 'https://api.spotify.com/v1/me/player/currently-playing',
-//   //       method: 'GET',
-//   //       headers: {
-//   //         'Authorization': 'Bearer ' + accessToken
-//   //       }
-//   //     };
-
-//   //     request(options, (err, resp, body) => {
-//   //       if (err) {
-//   //         console.log('api call /currentSong unsuccessful: ', err);
-//   //         res.sendStatus(404);
-//   //       } else {
-//   //         console.log('api call /currentSong successful');
-//   //         res.send(body);
-//   //       }
-//   //     });
-//   //   })
-//   //   .catch((err) => {
-//   //     console.log('error occurred while retrieving accountData in /currentSong:', err);
-//   //     res.sendStatus(404);
-//   //   });
-//   // })
-//   // .catch((err) => {
-//   //   console.log('Unable to retrieve playlist data in /currentSong: ', err);
-//   //   res.sendStatus(404);
-//   });
 // });
+
+app.get('/currentSong', (req, res) => {
+  var playlistHash = req.query.playlist;
+  var currentSongIndex = req.query.currentSongIndex;
+
+  db.retrievePlaylist(playlistHash)
+  .then((playlistData) => {
+
+    var currentSong = playlistData.orderedSongs[currentSongIndex];
+
+    db.retrieveSongForPlaylist(currentSong, playlistHash)
+    .then((songData) => {
+      res.status(201).send(songData);
+    })
+    .catch((err) => {
+      console.log('error while in db.retrieveSongForPlaylist in /currentSong:', err);
+    });
+
+  //   db.retrieveAccount(accountId)
+  //   .then((accountData) => {
+  //     var accessToken = accountData.accessToken;
+  //     console.log('accessToken: ', accessToken);
+
+  //     var options = {
+  //       url: 'https://api.spotify.com/v1/me/player/currently-playing',
+  //       method: 'GET',
+  //       headers: {
+  //         'Authorization': 'Bearer ' + accessToken
+  //       }
+  //     };
+
+  //     request(options, (err, resp, body) => {
+  //       if (err) {
+  //         console.log('api call /currentSong unsuccessful: ', err);
+  //         res.sendStatus(404);
+  //       } else {
+  //         console.log('api call /currentSong successful');
+  //         res.send(body);
+  //       }
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log('error occurred while retrieving accountData in /currentSong:', err);
+  //     res.sendStatus(404);
+  //   });
+  // })
+  // .catch((err) => {
+  //   console.log('Unable to retrieve playlist data in /currentSong: ', err);
+  //   res.sendStatus(404);
+  });
+});
 
 // socket.io framework
 io.on( 'connection', function(client) {
