@@ -27,7 +27,14 @@ let refreshAccessToken = (accessToken, refreshToken) => {
   return Spotify.refreshAccessToken();
 };
 
+let searchTracks = (accessToken, searchString) => {
+  Spotify.setAccessToken(accessToken);
+  return Spotify.searchTracks(searchString);
+
+};
+
 module.exports.createPlaylist = createPlaylist;
 module.exports.addSongToPlaylist = addSongToPlaylist;
 module.exports.reorderPlaylist = reorderPlaylist;
 module.exports.refreshAccessToken = refreshAccessToken;
+module.exports.searchTracks = searchTracks;

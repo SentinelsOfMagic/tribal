@@ -26,9 +26,6 @@ app.use((req, res, next) => {
     res.redirect(process.env.HOST + req.url);
   } else if (process.env.DEPLOY_ENV === 'staging' && req.headers['x-forwarded-proto'] !== 'https') {
     res.redirect(process.env.HOST + req.url);
-    // warmsea is Connor's dev staging to check URLs before staging pull requests
-  } else if (process.env.DEPLOY_ENV === 'warmsea' && req.headers['x-forwarded-proto'] !== 'https') {
-    res.redirect('https://warm-sea-98216.herokuapp.com' + req.url);
   } else {
     next();
   }
@@ -130,23 +127,36 @@ app.get('/clients', (req, res) => {
 // Query Spotify's Search API for a track name, and return an array of all matching tracks. Each track in the response will
 // be an object with properties uri and artist name.
 app.get('/tracks', (req, res) => {
-  const query = req.query.trackName; // name me trackName in the client
+  const query = req.query.trackName; // TODO: race condition possibility?
+  const playlistHash = req.query.playlist;
 
-  let tracks;
+  db.retrievePlaylist(playlistHash)
+  .then((playlistData) => {
 
-  request(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=10`, (error, response, body) => {
-    const parsedBody = JSON.parse(body);
+    var accountId = playlistData.accountId;
 
-    if (parsedBody.tracks.items.length <= 0) {
+    return db.retrieveAccount(playlistData.accountId);
+  })
+  .then((accountData) => {
+
+    let accessToken = accountData.accessToken;
+    return apiCalls.searchTracks(accessToken, query);
+  })
+  .then((tracks) => {
+    tracks = tracks.body.tracks.items;
+    //console.log(tracks.body.tracks);
+    if (tracks.length <= 0) {
       res.send([]);
-      return;
+    } else {
+      res.status(200).send(tracks.slice(0, 10).map(track => {
+        return {uri: track.uri, artist: track.artists[0].name, title: track.name, url: track.album.images[1].url, duration: track.duration_ms};
+      }));
     }
-
-    tracks = parsedBody.tracks.items.map((track) => {
-      return {uri: track.uri, artist: track.artists[0].name, title: track.name, url: track.album.images[1].url, duration: track.duration_ms};
-    });
-    res.status(200).send(tracks);
-    return;
+    //res.send([]);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).send(err);
   });
 });
 
@@ -170,19 +180,27 @@ app.get('/inputVotes', (req, res) => {
     .then((songObject) => {
       return db.updateSongOrderAfterVote(songObject, -1);
     })
+    .then(() => {
+      res.send('done voting');
+    })
     .catch(err=> {
       console.log('fail input upvote', err);
+      res.send('err');
     });
   } else {
     db.inputSongDownvote(req.query.hash, req.query.songId)
     .then((songObject) => {
       return db.updateSongOrderAfterVote(songObject, 1);
     })
+    .then(() => {
+      res.send('done voting');
+    })
     .catch(err=> {
       console.log('fail input downvote', err);
+      res.send('err');
     });
   }
-  res.send('done voting');
+
 });
 
 app.get('/playlist', (req, res) => {
