@@ -33,7 +33,6 @@ const tribalServer = function( $http ) {
 
   this.insertVotes = function(vote, songId, hash, $index, callback) {
     // socket.emit('voting', vote, songId, hash, $index, callback);
-    socket.emit('reorder', hash);
     return $http.get('/inputVotes', {
       params: {
         vote: vote,
@@ -41,6 +40,10 @@ const tribalServer = function( $http ) {
         hash: hash,
         index: $index
       }
+    })
+    .then((data) => {
+      socket.emit('reorder', hash);
+      return data;
     });
   };
 
@@ -71,10 +74,11 @@ const tribalServer = function( $http ) {
     socket.on('song added', callback);
   };
 
-  this.spotifySearch = function(trackName) {
+  this.spotifySearch = function(trackName, playlistHash) {
     return $http.get( '/tracks', {
       params: {
         trackName: trackName,
+        playlist: playlistHash
       }
     });
   };

@@ -1,10 +1,12 @@
-const SearchController = function( tribalServer ) {
+const SearchController = function($location, tribalServer) {
+
 
   this.searchButtonHandler = (query) => {
-    tribalServer.spotifySearch( query )
-      .then( (results) => {
-        this.searchResultsHandler( results );
-      });
+    this.playlistHash = $location.search().playlist;
+    tribalServer.spotifySearch( query, this.playlistHash )
+    .then( (results) => {
+      this.searchResultsHandler( results );
+    });
   };
 };
 
@@ -14,7 +16,7 @@ const Search = function() {
       searchResultsHandler: '<',
     },
     restrict: 'E',
-    controller: [ 'tribalServer', SearchController ],
+    controller: [ '$location', 'tribalServer', SearchController ],
     controllerAs: 'ctrl',
     bindToController: true,
     templateUrl: '/templates/search.html'
